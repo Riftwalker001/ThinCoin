@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thin Coin (THIN) — Sequential-64 CPU Proof-of-Work on Base Mainnet</title>
+    <link rel="icon" type="image/svg+xml" href="web/assets/logo.svg">
+    <style>
+        :root {
+            --bg-primary: #070a0f;
+            --bg-secondary: #0d131f;
+            --bg-card: #121a2b;
+            --accent-cyan: #00f2fe;
+            --accent-green: #00e676;
+            --accent-gold: #ffd700;
+            --accent-blue: #0052ff;
+            --accent-purple: #bb86fc;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            padding: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        .brand-text h1 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-cyan), #00a8ff);
+            color: #000;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+            color: #000;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 70px 0 50px;
+        }
+
+        .hero-logo {
+            width: 130px;
+            height: 130px;
+            margin-bottom: 24px;
+            filter: drop-shadow(0 0 35px rgba(0, 242, 254, 0.4));
+            animation: pulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 25px rgba(0, 242, 254, 0.3)); }
+            100% { transform: scale(1.03); filter: drop-shadow(0 0 40px rgba(0, 242, 254, 0.6)); }
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 780px;
+            margin: 0 auto 30px;
+        }
+
+        .badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
+        }
+
+        .badge {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-green { border-color: var(--accent-green); color: var(--accent-green); }
+        .badge-cyan { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+        .badge-gold { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+        .cta-buttons {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Terminal / Command Box */
+        .terminal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 850px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .terminal-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .command-box {
+            background: #03060a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 13px;
+            color: var(--accent-green);
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+            margin-left: 12px;
+        }
+
+        .copy-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* Features Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 50px 0;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-cyan);
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Token Specs Table */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .specs-table th, .specs-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .specs-table th {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        footer {
+            margin-top: 70px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="#" class="brand">
+                <img src="web/assets/logo.svg" alt="Thin Coin" />
+                <div class="brand-text">
+                    <h1>Thin Coin</h1>
+                    <span>Base Mainnet PoW</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="web/whitepaper.html" class="btn">📜 Whitepaper</a>
+                <a href="https://dexscreener.com/base/0xeaf53cae8ae19509b675cbfd819680d668c28a4e" target="_blank" class="btn">📈 DEXScreener</a>
+                <a href="https://app.uniswap.org/swap?outputCurrency=0x129af9c585f9a8a0438c79644d03e049ed6291b2&chain=base" target="_blank" class="btn btn-primary">🦄 Trade THIN</a>
+            </div>
+        </header>
+
+        <section class="hero">
+            <img src="web/assets/logo.svg" alt="Thin Coin Logo" class="hero-logo" />
+            <h2>Sequential-64 CPU Proof-of-Work<br/>on Base Mainnet</h2>
+            <p>A decentralized, GPU-resistant CPU mineable cryptocurrency powered by 64-round sequential Keccak-256 consensus, on-chain loyalty staking, and 100% locked liquidity.</p>
+            
+            <div class="badges">
+                <span class="badge badge-green">✓ 100% LP Locked (180 Days)</span>
+                <span class="badge badge-cyan">⚡ 21,000,000 Hard Cap</span>
+                <span class="badge badge-green">🛡️ 0% Tax (Clean ERC20)</span>
+                <span class="badge badge-gold">⭐ 1-in-64 Golden Jackpot</span>
+                <span class="badge">⛓️ Base Chain ID 8453</span>
+            </div>
+
+            <div class="cta-buttons">
+                <a href="web/whitepaper.html" class="btn btn-primary" style="padding: 12px 24px; font-size: 14px;">📖 Read Technical Whitepaper</a>
+                <a href="https://basescan.org/token/0x129af9c585f9a8a0438c79644d03e049ed6291b2" target="_blank" class="btn" style="padding: 12px 24px; font-size: 14px;">🔍 View on BaseScan ↗</a>
+                <a href="https://dexscreener.com/base/0xeaf53cae8ae19509b675cbfd819680d668c28a4e" target="_blank" class="btn" style="padding: 12px 24px; font-size: 14px;">📈 Live Price Chart ↗</a>
+            </div>
+        </section>
+
+        <!-- 1-Line Universal Miner -->
+        <div class="terminal-card">
+            <div class="terminal-header">
+                <span class="terminal-title">⛏️ 1-Line Universal CPU Miner (Linux & Raspberry Pi)</span>
+                <span style="font-size: 12px; color: var(--accent-green);">Auto-Compiles Native C Engine in 30s</span>
+            </div>
+            <div class="command-box">
+                <span id="minerCmd">curl -sSL https://raw.githubusercontent.com/Riftwalker001/ThinCoin/main/web/install.sh | bash</span>
+                <button class="copy-btn" onclick="copyCommand('minerCmd')">📋 Copy</button>
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px;">
+                Runs out-of-the-box on Ubuntu, Debian, Raspberry Pi OS, Fedora, Arch, and Linux Mint. Automatically creates wallet, compiles native C accelerator, and starts hashing.
+            </p>
+        </div>
+
+        <!-- Local 2D Visual Blockchain Launcher -->
+        <div class="terminal-card" style="margin-top: -15px;">
+            <div class="terminal-header">
+                <span class="terminal-title">🌐 Run Local 2D Visual Blockchain & Telemetry Hub</span>
+                <span style="font-size: 12px; color: var(--accent-cyan);">Python 3 Built-in</span>
+            </div>
+            <div class="command-box">
+                <span id="hubCmd">git clone https://github.com/Riftwalker001/ThinCoin.git && cd ThinCoin && python3 web/dashboard.py</span>
+                <button class="copy-btn" onclick="copyCommand('hubCmd')">📋 Copy</button>
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px;">
+                Launches the local Web3 Hub at <code>http://127.0.0.1:7446</code> with real-time laser conduits, portfolio tracker, dev transfer console, and live epoch feeds.
+            </p>
+        </div>
+
+        <!-- Architecture Pillars -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Sequential-64 Keccak Consensus</h3>
+                <p>Each valid Proof-of-Work solution requires computing 64 sequentially chained Keccak-256 hashes. This eliminates GPU parallel advantage and keeps mining competitive on standard consumer CPUs.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌾</div>
+                <h3>On-Chain Loyalty Staking</h3>
+                <p>Miners can automatically stake rewards with <code>--auto-stake</code> to earn continuous 3.5% yield per epoch. Locked staking permanently constricts liquid supply on Uniswap.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⭐</div>
+                <h3>1-in-64 Golden Jackpot</h3>
+                <p>1.5% of every block reward feeds the Golden Jackpot Pot. When a miner hits a golden nonce (ending in <code>0x3F</code>), the entire jackpot pot is swept to their wallet.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔒</div>
+                <h3>100% Time-Locked Liquidity</h3>
+                <p>100% of Uniswap V2 LP tokens are non-custodially locked in <code>ThinLPLocker.sol</code> until April 2027. Zero owner rug pull capability.</p>
+            </div>
+        </div>
+
+        <!-- Tokenomics Table -->
+        <h3 style="font-size: 22px; margin-top: 40px; margin-bottom: 8px;">Tokenomics & On-Chain Specifications</h3>
+        <table class="specs-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Specification</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Token Name / Symbol</strong></td>
+                    <td>Thin Coin (THIN)</td>
+                    <td>18 Decimals, Standard Clean ERC-20</td>
+                </tr>
+                <tr>
+                    <td><strong>Network</strong></td>
+                    <td>Base Mainnet (Chain ID 8453)</td>
+                    <td>Sub-cent L2 transactions for fast mining submissions</td>
+                </tr>
+                <tr>
+                    <td><strong>Token Contract</strong></td>
+                    <td><code>0x129af9c585f9a8a0438c79644d03e049ed6291b2</code></td>
+                    <td><a href="https://basescan.org/token/0x129af9c585f9a8a0438c79644d03e049ed6291b2" target="_blank" style="color:var(--accent-cyan);">BaseScan Verified ↗</a></td>
+                </tr>
+                <tr>
+                    <td><strong>Uniswap V2 Pair</strong></td>
+                    <td><code>0xeaf53cae8ae19509b675cbfd819680d668c28a4e</code></td>
+                    <td><a href="https://dexscreener.com/base/0xeaf53cae8ae19509b675cbfd819680d668c28a4e" target="_blank" style="color:var(--accent-cyan);">DEXScreener ↗</a></td>
+                </tr>
+                <tr>
+                    <td><strong>LP Time-Lock Vault</strong></td>
+                    <td><code>0x1c6dc4c09a6db32ea2807cd945763f2d44277b10</code></td>
+                    <td>100.00% of LP Tokens Locked for 180 Days</td>
+                </tr>
+                <tr>
+                    <td><strong>Max Hard Cap</strong></td>
+                    <td>21,000,000 THIN</td>
+                    <td>Zero minting beyond mathematical hard cap</td>
+                </tr>
+                <tr>
+                    <td><strong>Block Reward Split</strong></td>
+                    <td>94.10% Miner / 3.50% Staking / 1.50% Jackpot / 0.90% Dev</td>
+                    <td>Miner keeps overwhelming majority of block value</td>
+                </tr>
+                <tr>
+                    <td><strong>Transfer Tax</strong></td>
+                    <td>0% Buy / 0% Sell</td>
+                    <td>Zero honeypot, zero blacklists, 100% green audit</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <footer>
+            <p>Thin Coin (THIN) &bull; Decentralized CPU Proof-of-Work on Base Mainnet</p>
+            <p style="margin-top: 6px;">
+                <a href="web/whitepaper.html">Whitepaper</a> &bull; 
+                <a href="https://github.com/Riftwalker001/ThinCoin" target="_blank">GitHub Repository</a> &bull; 
+                <a href="https://dexscreener.com/base/0xeaf53cae8ae19509b675cbfd819680d668c28a4e" target="_blank">DEXScreener</a> &bull; 
+                <a href="https://basescan.org/token/0x129af9c585f9a8a0438c79644d03e049ed6291b2" target="_blank">BaseScan</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function copyCommand(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                event.target.innerText = "✓ Copied!";
+                setTimeout(() => { event.target.innerText = "📋 Copy"; }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
