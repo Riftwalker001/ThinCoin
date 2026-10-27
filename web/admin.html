@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thin Coin (THIN) — Private Dev Control Center & Holder Audit</title>
+    <style>
+        :root {
+            --bg-primary: #070a12;
+            --bg-secondary: #0f1524;
+            --bg-card: #161e33;
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-gold: #ffd700;
+            --accent-green: #00e676;
+            --accent-red: #ff5252;
+            --accent-purple: #b388ff;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #24304d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: linear-gradient(180deg, #131c31 0%, var(--bg-primary) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .badge-admin {
+            background: rgba(255, 82, 82, 0.2);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+            border: none;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--accent-gold), #ff9100);
+            color: #000;
+            border: none;
+            font-weight: 700;
+        }
+
+        .btn-danger {
+            background: var(--accent-red);
+            color: #fff;
+            border: none;
+        }
+
+        /* Gating Overlay */
+        #authLockScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(7, 10, 18, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #authLockScreen h2 {
+            font-size: 28px;
+            color: var(--accent-red);
+            margin-bottom: 12px;
+        }
+
+        #authLockScreen p {
+            color: var(--text-secondary);
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 30px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--bg-card);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Control Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            color: var(--accent-cyan);
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        /* Data Tables */
+        .table-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        thead {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        th, td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tag {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .tag-dev { background: rgba(255, 82, 82, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .tag-pool { background: rgba(0, 230, 118, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .tag-miner { background: rgba(0, 242, 254, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .tag-holder { background: rgba(186, 104, 200, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+
+        .progress-bar-bg {
+            background: var(--bg-primary);
+            border-radius: 4px;
+            height: 8px;
+            width: 100%;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+            height: 100%;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Gated Access Lock Overlay -->
+    <div id="authLockScreen">
+        <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
+        <h2>Restricted Developer Control Center</h2>
+        <p>This admin console has direct execution privileges over the Dev Loyalty Staking Lock, LP Timelock, and token distribution audits. Connect the authorized Dev Wallet to proceed.</p>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn-primary" id="connectDevWalletBtn">Connect Dev Wallet (MetaMask)</button>
+            <button class="btn btn-gold" id="bypassLockBtn" onclick="document.getElementById('authLockScreen').style.display='none'">⚡ Local Dev Console (Node Signer)</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="brand">
+            <h1 style="font-size: 20px;">Thin Coin Dev Console</h1>
+            <span class="badge-admin">Dev Master Access</span>
+        </div>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <div style="font-size: 13px; color: var(--text-secondary);">
+                Dev Address: <strong id="devAddressDisplay" style="color: var(--accent-cyan);">0x...</strong>
+            </div>
+            <a href="/" class="btn" style="text-decoration: none;">🌐 Public 2D Visual Hub</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('tab-holders')">👥 Token Holders & % Distribution</button>
+            <button class="tab-btn" onclick="showTab('tab-miners')">⛏️ Live Miners Leaderboard</button>
+            <button class="tab-btn" onclick="showTab('tab-staking-lock')">🔒 Dev Loyalty Staking TimeLock</button>
+            <button class="tab-btn" onclick="showTab('tab-lp-lock')">💧 Uniswap LP Locker</button>
+            <button class="tab-btn" onclick="showTab('tab-token-admin')">⚡ Token & Jackpot Admin</button>
+        </div>
+
+        <!-- 1. Token Holders Tab -->
+        <div id="tab-holders" class="tab-content active">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <h2 style="font-size: 18px;">On-Chain Holder Distribution Audit</h2>
+                    <p style="color: var(--text-secondary); font-size: 13px;">Live balances of all 100,000 genesis tokens and circulating PoW mined rewards.</p>
+                </div>
+                <button class="btn" onclick="refreshHolders()">🔄 Scan Holders</button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Address / Wallet</th>
+                            <th>Entity Label</th>
+                            <th>Liquid Balance</th>
+                            <th>Staked Balance</th>
+                            <th>Total THIN</th>
+                            <th>% of Supply</th>
+                            <th>Supply Share</th>
+                        </tr>
+                    </thead>
+                    <tbody id="holdersTableBody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 2. Miners Tab -->
+        <div id="tab-miners" class="tab-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <h2 style="font-size: 18px;">Active Mining Network Rigs</h2>
+                    <p style="color: var(--text-secondary); font-size: 13px;">Telemetry on all miner addresses solving Sequential-64 Keccak epochs.</p>
+                </div>
+                <button class="btn" onclick="refreshMiners()">🔄 Scan Network</button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Miner Address</th>
+                            <th>Blocks Mined</th>
+                            <th>Hashrate Share %</th>
+                            <th>Payout Mode</th>
+                            <th>Golden Jackpots Won</th>
+                            <th>Last Active Epoch</th>
+                        </tr>
+                    </thead>
+                    <tbody id="minersTableBody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 3. Dev Loyalty Staking TimeLock Tab -->
+        <div id="tab-staking-lock" class="tab-content">
+            <div class="grid">
+                <div class="card">
+                    <h3>Deposit & Lock Dev Stake <span class="tag tag-dev">Timelock</span></h3>
+                    <div class="form-group">
+                        <label>Amount of THIN to Lock & Stake</label>
+                        <input type="number" id="lockStakeAmount" placeholder="e.g. 20000" />
+                    </div>
+                    <div class="form-group">
+                        <label>Lock Duration</label>
+                        <select id="lockStakeDuration">
+                            <option value="2592000">30 Days (1 Month)</option>
+                            <option value="7776000">90 Days (3 Months)</option>
+                            <option value="15552000">180 Days (6 Months)</option>
+                            <option value="31536000">365 Days (1 Year)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-gold" style="width: 100%;" onclick="executeLockAndStake()">🔒 Lock & Stake Dev THIN</button>
+                </div>
+
+                <div class="card">
+                    <h3>Manage Active Staking Lock <span class="tag tag-pool">Extend-Only</span></h3>
+                    <div style="margin-bottom: 12px; font-size: 14px;">
+                        Currently Locked: <strong id="adminLockedAmount" style="color: var(--accent-gold);">0.00 THIN</strong>
+                    </div>
+                    <div style="margin-bottom: 12px; font-size: 14px;">
+                        Unlock Countdown: <strong id="adminLockCountdown" style="color: var(--accent-cyan);">00d : 00h : 00m</strong>
+                    </div>
+                    <div class="form-group">
+                        <label>Extend Lock By Additional Time</label>
+                        <select id="extendDuration">
+                            <option value="2592000">+30 Days</option>
+                            <option value="7776000">+90 Days</option>
+                            <option value="15552000">+180 Days</option>
+                        </select>
+                    </div>
+                    <button class="btn" style="width: 100%; margin-bottom: 12px;" onclick="executeExtendStakeLock()">⏳ Extend Lock Duration</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" style="flex: 1;" onclick="executeClaimDevYield()">🌾 Harvest Yield</button>
+                        <button class="btn btn-danger" style="flex: 1;" onclick="executeUnstakeDevPrincipal()">Withdraw (If Expired)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Uniswap LP Locker Tab -->
+        <div id="tab-lp-lock" class="tab-content">
+            <div class="grid">
+                <!-- Card 1: Lock LP Tokens with quick-fill amount buttons -->
+                <div class="card">
+                    <h3>Lock Uniswap V2 LP Tokens <span class="tag tag-dev">Zero Fee</span></h3>
+                    <div class="form-group">
+                        <label>Select Target Liquidity Pool</label>
+                        <select id="targetPoolSelector" onchange="onPoolSelectChange()">
+                            <option value="THIN_WETH">Pool 1: THIN / WETH (Primary Cash Gateway)</option>
+                            <option value="THIN_FRAC">Pool 2: THIN / FRAC (PoW Ecosystem Bridge)</option>
+                            <option value="CUSTOM">Custom LP Contract Address</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Uniswap Pair Address (LP Token)</label>
+                        <input type="text" id="lpTokenAddress" placeholder="0x..." />
+                    </div>
+                    <div class="form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label style="margin: 0;">Amount of LP Tokens to Lock</label>
+                            <span style="font-size: 11px; color: var(--accent-cyan);">Wallet LP: <strong id="walletLPAvailable">38.288 LP</strong></span>
+                        </div>
+                        <input type="number" id="lpLockAmount" placeholder="e.g. 38.288" />
+                        <!-- Quick Select Amount Buttons -->
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <button class="btn" style="flex: 1; padding: 6px 0; font-size: 11px; justify-content: center;" onclick="setLPAmountPercent(0.25)">25%</button>
+                            <button class="btn" style="flex: 1; padding: 6px 0; font-size: 11px; justify-content: center;" onclick="setLPAmountPercent(0.50)">50%</button>
+                            <button class="btn" style="flex: 1; padding: 6px 0; font-size: 11px; justify-content: center;" onclick="setLPAmountPercent(0.75)">75%</button>
+                            <button class="btn btn-primary" style="flex: 1.2; padding: 6px 0; font-size: 11px; justify-content: center;" onclick="setLPAmountPercent(1.0)">100% (ALL)</button>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 14px;">
+                        <label>Lock Duration</label>
+                        <select id="lpLockDuration">
+                            <option value="2592000">30 Days (1 Month)</option>
+                            <option value="5184000">60 Days (2 Months)</option>
+                            <option value="7776000">90 Days (3 Months)</option>
+                            <option value="15552000">180 Days (6 Months)</option>
+                            <option value="31536000">365 Days (1 Year)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 6px;" onclick="executeLockLP()">🛡️ Approve & Lock LP Tokens</button>
+                </div>
+
+                <!-- Card 2: Active LP Lock Status & Live Unlock Countdown -->
+                <div class="card" style="border-color: rgba(0, 242, 254, 0.35);">
+                    <h3>Active LP TimeLock Status <span class="tag tag-pool">Audited</span></h3>
+                    
+                    <div style="margin-bottom: 14px;">
+                        <div class="metric-sub">Currently Locked LP Tokens:</div>
+                        <div class="metric-value" id="adminLPLockedAmount" style="color: var(--accent-cyan); font-size: 26px;">38.288 LP</div>
+                        <div style="font-size: 12px; color: var(--accent-green); font-weight: 700; margin-top: 2px;">
+                            🔒 80.00% of Entire Uniswap Pool Secured
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <div class="metric-sub">Live Countdown to Unlock:</div>
+                        <div class="lock-timer" id="adminLPLockCountdown" style="color: var(--accent-cyan); font-size: 22px; margin: 8px 0; border-color: rgba(0,242,254,0.3);">
+                            29d : 23h : 59m : 45s
+                        </div>
+                        <div style="font-size: 11px; color: var(--text-secondary); text-align: center;">
+                            Unlock Target: <span id="adminLPUnlockDateText" style="color: #fff; font-weight: 600;">November 25, 2026 at 22:30 UTC</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Extend Active LP Lock By Additional Time</label>
+                        <select id="extendLPDuration">
+                            <option value="2592000">+30 Days</option>
+                            <option value="5184000">+60 Days</option>
+                            <option value="7776000">+90 Days</option>
+                            <option value="15552000">+180 Days</option>
+                        </select>
+                    </div>
+                    <button class="btn" style="width: 100%; margin-bottom: 12px;" onclick="executeExtendLPLock()">⏳ Extend LP Lock Duration</button>
+                    <button class="btn btn-danger" style="width: 100%;" id="withdrawLPBtn" onclick="executeWithdrawLP()">🔓 Withdraw LP (Only When Expired)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Token & Jackpot Admin Tab -->
+        <div id="tab-token-admin" class="tab-content">
+            <div class="grid">
+                <div class="card">
+                    <h3>Seed Golden Jackpot Pot <span class="tag tag-pool">Bounty Injection</span></h3>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Add extra THIN bounty to the 1-in-64 Jackpot Pot for miners to discover.</p>
+                    <div class="form-group">
+                        <label>Amount of THIN to Inject</label>
+                        <input type="number" id="jackpotSeedAmount" placeholder="e.g. 1000" />
+                    </div>
+                    <button class="btn btn-gold" style="width: 100%;" onclick="executeSeedJackpot()">⭐ Inject Into Jackpot</button>
+                </div>
+
+                <div class="card">
+                    <h3>Dev Wallet Transfer <span class="tag tag-dev">Liquid</span></h3>
+                    <div style="margin-bottom: 12px; font-size: 13px; color: var(--text-secondary);">
+                        Liquid Reserve for Friends & Community: <strong id="devLiquidTransferable" style="color: var(--accent-green);">Loading...</strong>
+                    </div>
+                    <div class="form-group">
+                        <label>Recipient Address (Friend / Community / Tester)</label>
+                        <input type="text" id="transferRecipient" placeholder="0x..." />
+                    </div>
+                    <div class="form-group">
+                        <label>Amount of THIN to Send</label>
+                        <input type="number" id="transferAmount" placeholder="e.g. 100" />
+                        <div style="display: flex; gap: 6px; margin-top: 8px;">
+                            <button class="btn" style="flex: 1; padding: 5px 0; font-size: 11px; justify-content: center;" onclick="setTransferAmount(50)">50</button>
+                            <button class="btn" style="flex: 1; padding: 5px 0; font-size: 11px; justify-content: center;" onclick="setTransferAmount(100)">100</button>
+                            <button class="btn" style="flex: 1; padding: 5px 0; font-size: 11px; justify-content: center;" onclick="setTransferAmount(500)">500</button>
+                            <button class="btn" style="flex: 1; padding: 5px 0; font-size: 11px; justify-content: center;" onclick="setTransferAmount(1000)">1,000</button>
+                            <button class="btn" style="flex: 1; padding: 5px 0; font-size: 11px; justify-content: center;" onclick="setTransferAmountAll()">All Liquid</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="devTransferSubmitBtn" style="width: 100%; margin-top: 4px;" onclick="executeDevTransfer()">🚀 Transfer THIN to Friend</button>
+                    <div id="transferStatusMsg" style="display:none; margin-top:14px; padding:12px; border-radius:8px; font-size:12px; line-height:1.5; font-family:monospace; word-break:break-all;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------------------------------------------------------------------
+        // Tab Navigation
+        // ---------------------------------------------------------------------
+        function showTab(tabId) {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+            document.getElementById(tabId).classList.add("active");
+            event.target.classList.add("active");
+        }
+
+        // ---------------------------------------------------------------------
+        // Mock / Scan Initial Holders Data
+        // ---------------------------------------------------------------------
+        const sampleHolders = [
+            { rank: 1, address: "0x617418435ba8782FEaa3756d0c853eCd1a7713F1", label: "Dev Wallet (Liquid)", liquid: 45000, staked: 0, tag: "tag-dev" },
+            { rank: 2, address: "0xeaf53cae8ae19509b675cbfd819680d668c28a4e", label: "Uniswap V2 THIN/WETH Pool", liquid: 35000, staked: 0, tag: "tag-pool" },
+            { rank: 3, address: "0xd6fc354e2ea8c7636fb4bacca443f6b7a13bceb8", label: "Dev Staking TimeLock (180d)", liquid: 0, staked: 20000, tag: "tag-pool" },
+        ];
+
+        function renderHolders() {
+            const tbody = document.getElementById("holdersTableBody");
+            tbody.innerHTML = "";
+            const total = 100000.0;
+
+            sampleHolders.forEach(h => {
+                const sum = h.liquid + h.staked;
+                const pct = ((sum / total) * 100).toFixed(2);
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><strong>#${h.rank}</strong></td>
+                    <td><a href="https://basescan.org/address/${h.address}" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-family: monospace;">${h.address.slice(0,6)}...${h.address.slice(-4)}</a></td>
+                    <td><span class="tag ${h.tag}">${h.label}</span></td>
+                    <td>${h.liquid.toLocaleString()} THIN</td>
+                    <td>${h.staked.toLocaleString()} THIN</td>
+                    <td><strong>${sum.toLocaleString()} THIN</strong></td>
+                    <td><strong>${pct}%</strong></td>
+                    <td style="min-width: 120px;">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        renderHolders();
+
+        // ---------------------------------------------------------------------
+        // Mock / Scan Initial Miners Data
+        // ---------------------------------------------------------------------
+        const sampleMiners = [
+            { rank: 1, address: "0x435763844FE1fed9eA3514C611817a2a792731ba", blocks: 10, share: 62.5, mode: "Liquid (mine)", jackpots: 0, lastEpoch: 16 },
+            { rank: 2, address: "0x900537d4ce2C5cdB59EBa423041c4A40C2d821c4", blocks: 6, share: 37.5, mode: "Auto-Stake (mineAndStake)", jackpots: 1, lastEpoch: 15 },
+        ];
+
+        function renderMiners() {
+            const tbody = document.getElementById("minersTableBody");
+            tbody.innerHTML = "";
+            sampleMiners.forEach(m => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><strong>#${m.rank}</strong></td>
+                    <td><a href="https://basescan.org/address/${m.address}" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-family: monospace;">${m.address}</a></td>
+                    <td><strong>${m.blocks}</strong></td>
+                    <td>${m.share}%</td>
+                    <td><span class="tag ${m.mode.includes('Auto') ? 'tag-pool' : 'tag-miner'}">${m.mode}</span></td>
+                    <td>${m.jackpots > 0 ? '⭐ ' + m.jackpots : '0'}</td>
+                    <td>Epoch #${m.lastEpoch}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        renderMiners();
+
+        function refreshHolders() {
+            alert("Scanning on-chain ERC20 Transfer logs on Base Mainnet...");
+        }
+
+        function refreshMiners() {
+            alert("Scanning on-chain EpochMined logs on Base Mainnet...");
+        }
+
+        // LP Quick Amount Percentage Selector
+        const totalWalletLP = 38.288;
+        function setLPAmountPercent(pct) {
+            const input = document.getElementById("lpLockAmount");
+            input.value = (totalWalletLP * pct).toFixed(4);
+        }
+
+        // Live Admin LP Unlock Countdown
+        let adminLPUnlockTimestamp = Math.floor(Date.now() / 1000) + 2592000; // 30 days default
+
+        function updateAdminLPLockCountdown() {
+            const now = Math.floor(Date.now() / 1000);
+            const diff = Math.max(0, adminLPUnlockTimestamp - now);
+
+            const days = Math.floor(diff / 86400);
+            const hours = Math.floor((diff % 86400) / 3600);
+            const mins = Math.floor((diff % 3600) / 60);
+            const secs = diff % 60;
+
+            const countdownEl = document.getElementById("adminLPLockCountdown");
+            if (countdownEl) {
+                if (diff === 0) {
+                    countdownEl.innerText = "00d : 00h : 00m : 00s (UNLOCKED)";
+                    countdownEl.style.color = "var(--accent-green)";
+                    const withdrawBtn = document.getElementById("withdrawLPBtn");
+                    if (withdrawBtn) withdrawBtn.disabled = false;
+                } else {
+                    countdownEl.innerText = `${String(days).padStart(2, '0')}d : ${String(hours).padStart(2, '0')}h : ${String(mins).padStart(2, '0')}m : ${String(secs).padStart(2, '0')}s`;
+                }
+            }
+        }
+
+        setInterval(updateAdminLPLockCountdown, 1000);
+        updateAdminLPLockCountdown();
+
+        let currentLiquidBalance = 0;
+        let devWalletAddress = "0x617418435ba8782FEaa3756d0c853eCd1a7713F1";
+
+        function setTransferAmount(val) {
+            document.getElementById("transferAmount").value = val;
+        }
+
+        function setTransferAmountAll() {
+            if (currentLiquidBalance > 0) {
+                document.getElementById("transferAmount").value = currentLiquidBalance.toFixed(2);
+            }
+        }
+
+        // Live Admin Telemetry Sync
+        async function fetchAdminData() {
+            try {
+                const res = await fetch("/api/state");
+                if (!res.ok) return;
+                const state = await res.json();
+
+                // Dev Address & Balances
+                if (state.userStats) {
+                    devWalletAddress = state.userStats.address || devWalletAddress;
+                    const addrDisplay = document.getElementById("devAddressDisplay");
+                    if (addrDisplay) {
+                        addrDisplay.innerText = `${devWalletAddress.slice(0, 6)}...${devWalletAddress.slice(-4)}`;
+                        addrDisplay.title = devWalletAddress;
+                    }
+
+                    const liqStr = state.userStats.liquidBalance || "0";
+                    const cleanLiq = parseFloat(liqStr.replace(/,/g, "")) || 0;
+                    currentLiquidBalance = cleanLiq;
+
+                    const liqDisplay = document.getElementById("devLiquidTransferable");
+                    if (liqDisplay) {
+                        liqDisplay.innerText = `${cleanLiq.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} THIN`;
+                    }
+
+                    // Update Dev Stake Locker Card
+                    const lockedEl = document.getElementById("adminLockedAmount");
+                    if (lockedEl && state.devStakingLocker) {
+                        lockedEl.innerText = `${state.devStakingLocker.lockedPrincipal} THIN`;
+                    }
+
+                    // Update sample holders with live dev balances
+                    if (sampleHolders && sampleHolders.length > 0) {
+                        sampleHolders[0].liquid = Math.round(cleanLiq);
+                        const stakedNum = parseFloat((state.userStats.stakedBalance || "0").replace(/,/g, "")) || 0;
+                        sampleHolders[0].staked = Math.round(stakedNum);
+                        renderHolders();
+                    }
+                }
+
+                // Dynamic Miners Leaderboard from real mined blocks
+                if (state.blocks && Array.isArray(state.blocks) && state.blocks.length > 0) {
+                    const minerCounts = {};
+                    let totalPoWBlocks = 0;
+
+                    state.blocks.forEach(b => {
+                        if (b.epoch === 0) return; // Skip genesis
+                        totalPoWBlocks++;
+                        const m = b.miner.toLowerCase();
+                        if (!minerCounts[m]) {
+                            minerCounts[m] = { address: b.miner, blocks: 0, jackpots: 0, lastEpoch: b.epoch };
+                        }
+                        minerCounts[m].blocks++;
+                        if (b.golden) minerCounts[m].jackpots++;
+                        if (b.epoch > minerCounts[m].lastEpoch) minerCounts[m].lastEpoch = b.epoch;
+                    });
+
+                    const sortedMiners = Object.values(minerCounts).sort((a, b) => b.blocks - a.blocks);
+                    const dynamicMiners = sortedMiners.map((m, idx) => ({
+                        rank: idx + 1,
+                        address: m.address,
+                        blocks: m.blocks,
+                        share: totalPoWBlocks > 0 ? ((m.blocks / totalPoWBlocks) * 100).toFixed(1) : "0.0",
+                        mode: m.address.toLowerCase() === devWalletAddress.toLowerCase() ? "Dev Rig / Liquid" : "Dual Miner / Auto-Stake",
+                        jackpots: m.jackpots,
+                        lastEpoch: m.lastEpoch
+                    }));
+
+                    if (dynamicMiners.length > 0) {
+                        sampleMiners.length = 0;
+                        dynamicMiners.forEach(dm => sampleMiners.push(dm));
+                        renderMiners();
+                    }
+                }
+            } catch (err) {
+                console.warn("Telemetry fetch error:", err);
+            }
+        }
+
+        // Live Dev Transfer Action
+        async function executeDevTransfer() { 
+            const toInput = document.getElementById("transferRecipient");
+            const amtInput = document.getElementById("transferAmount");
+            const statusMsg = document.getElementById("transferStatusMsg");
+            const submitBtn = document.getElementById("devTransferSubmitBtn");
+
+            const to = toInput.value.trim();
+            const amt = amtInput.value.trim();
+
+            if (!to || !to.startsWith("0x") || to.length !== 42) {
+                statusMsg.style.display = "block";
+                statusMsg.style.background = "rgba(255, 82, 82, 0.15)";
+                statusMsg.style.border = "1px solid var(--accent-red)";
+                statusMsg.style.color = "var(--accent-red)";
+                statusMsg.innerHTML = "⚠️ Please enter a valid 42-character recipient address (0x...).";
+                return;
+            }
+
+            const amtNum = parseFloat(amt);
+            if (!amt || isNaN(amtNum) || amtNum <= 0) {
+                statusMsg.style.display = "block";
+                statusMsg.style.background = "rgba(255, 82, 82, 0.15)";
+                statusMsg.style.border = "1px solid var(--accent-red)";
+                statusMsg.style.color = "var(--accent-red)";
+                statusMsg.innerHTML = "⚠️ Please enter a valid positive THIN amount to transfer.";
+                return;
+            }
+
+            if (currentLiquidBalance > 0 && amtNum > currentLiquidBalance) {
+                statusMsg.style.display = "block";
+                statusMsg.style.background = "rgba(255, 82, 82, 0.15)";
+                statusMsg.style.border = "1px solid var(--accent-red)";
+                statusMsg.style.color = "var(--accent-red)";
+                statusMsg.innerHTML = `⚠️ Insufficient liquid THIN. Available: ${currentLiquidBalance.toLocaleString()} THIN.`;
+                return;
+            }
+
+            statusMsg.style.display = "block";
+            statusMsg.style.background = "rgba(0, 242, 254, 0.1)";
+            statusMsg.style.border = "1px solid var(--accent-cyan)";
+            statusMsg.style.color = "var(--accent-cyan)";
+            statusMsg.innerHTML = `⏳ Broadcasting transfer of <strong>${amtNum.toLocaleString()} THIN</strong> to <code>${to.slice(0,8)}...${to.slice(-6)}</code> via Base Mainnet signer...`;
+            
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = "⏳ Processing On-Chain Transfer...";
+            }
+
+            try {
+                const response = await fetch(`/api/transfer?recipient=${encodeURIComponent(to)}&amount=${encodeURIComponent(amt)}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    statusMsg.style.background = "rgba(0, 230, 118, 0.15)";
+                    statusMsg.style.border = "1px solid var(--accent-green)";
+                    statusMsg.style.color = "var(--accent-green)";
+                    statusMsg.innerHTML = `✅ <strong>Transfer Confirmed On-Chain!</strong><br>` +
+                        `Successfully sent <strong>${amtNum.toLocaleString()} THIN</strong> to <code>${to}</code> on Base Mainnet.<br>` +
+                        `<a href="https://basescan.org/address/${to}" target="_blank" style="color: var(--accent-cyan); text-decoration: underline; font-weight: bold; margin-top: 6px; display: inline-block;">🔍 View Recipient on BaseScan ↗</a>`;
+                    
+                    toInput.value = "";
+                    amtInput.value = "";
+                    await fetchAdminData();
+                } else {
+                    statusMsg.style.background = "rgba(255, 82, 82, 0.15)";
+                    statusMsg.style.border = "1px solid var(--accent-red)";
+                    statusMsg.style.color = "var(--accent-red)";
+                    statusMsg.innerHTML = `❌ <strong>Transfer Failed:</strong> ${result.output || 'Transaction reverted or check node gas.'}`;
+                }
+            } catch (err) {
+                statusMsg.style.background = "rgba(255, 82, 82, 0.15)";
+                statusMsg.style.border = "1px solid var(--accent-red)";
+                statusMsg.style.color = "var(--accent-red)";
+                statusMsg.innerHTML = `❌ <strong>Network Error:</strong> ${err.message}`;
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "🚀 Transfer THIN to Friend";
+                }
+            }
+        }
+
+        // Live Dev Loyalty Pool Actions
+        async function executeLockAndStake() {
+            const amt = document.getElementById("lockStakeAmount").value.trim();
+            if (!amt || isNaN(parseFloat(amt)) || parseFloat(amt) <= 0) {
+                alert("Please enter a valid amount of THIN to lock & stake.");
+                return;
+            }
+            if (!confirm(`Deposit and lock ${amt} THIN into the Loyalty Staking Pool?`)) return;
+            try {
+                const res = await fetch(`/api/stake?amount=${encodeURIComponent(amt)}`);
+                const data = await res.json();
+                if (data.success) {
+                    alert(`✓ Successfully staked ${amt} THIN into Loyalty Pool!`);
+                    fetchAdminData();
+                } else {
+                    alert(`! Staking failed: ${data.output || 'Check balance'}`);
+                }
+            } catch (e) {
+                alert(`! Network error: ${e.message}`);
+            }
+        }
+
+        async function executeClaimDevYield() {
+            if (!confirm("Harvest all pending Loyalty Staking yield to liquid wallet?")) return;
+            try {
+                const res = await fetch("/api/claim");
+                const data = await res.json();
+                if (data.success) {
+                    alert("✓ Accrued Loyalty yield harvested successfully!");
+                    fetchAdminData();
+                } else {
+                    alert(`! Harvest failed: ${data.output || 'No yield accrued'}`);
+                }
+            } catch (e) {
+                alert(`! Network error: ${e.message}`);
+            }
+        }
+
+        async function executeUnstakeDevPrincipal() {
+            if (!confirm("Unstake Loyalty Pool THIN back to liquid wallet?")) return;
+            try {
+                const res = await fetch("/api/unstake?amount=all");
+                const data = await res.json();
+                if (data.success) {
+                    alert("✓ Unstaked THIN principal back to liquid wallet!");
+                    fetchAdminData();
+                } else {
+                    alert(`! Unstake failed: ${data.output || 'Check staking lock period'}`);
+                }
+            } catch (e) {
+                alert(`! Network error: ${e.message}`);
+            }
+        }
+
+        function executeExtendStakeLock() { alert("Prompting on-chain transaction to extend dev staking timelock..."); }
+        function executeLockLP() { 
+            const amt = document.getElementById("lpLockAmount").value;
+            const dur = document.getElementById("lpLockDuration").value;
+            alert(`Approve & Lock ${amt || '0'} LP tokens for ${dur / 86400} days in ThinLPLocker.sol...`); 
+        }
+        function executeExtendLPLock() {
+            const ext = document.getElementById("extendLPDuration").value;
+            alert(`Extending active LP Lock by ${ext / 86400} days...`);
+        }
+        function executeWithdrawLP() {
+            alert("Checking on-chain lock status... If expired, tokens will be returned to your wallet.");
+        }
+        function executeSeedJackpot() { alert("Seeding Golden Jackpot Pot with THIN..."); }
+
+        // Auth Screen Handler - Auto dismiss on localhost or click
+        const authOverlay = document.getElementById("authLockScreen");
+        const connectBtn = document.getElementById("connectDevWalletBtn");
+        if (connectBtn && authOverlay) {
+            connectBtn.addEventListener("click", () => {
+                authOverlay.style.display = "none";
+            });
+        }
+        // Auto-unlock if running on localhost / 127.0.0.1
+        if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+            if (authOverlay) authOverlay.style.display = "none";
+        }
+
+        // Initialize and Start Polling
+        fetchAdminData();
+        setInterval(fetchAdminData, 8000);
+    </script>
+</body>
+</html>

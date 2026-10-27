@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thin Coin (THIN) — Technical Whitepaper</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+    <style>
+        :root {
+            --bg-primary: #070a0f;
+            --bg-secondary: #0d131f;
+            --bg-card: #121a2b;
+            --accent-cyan: #00f2fe;
+            --accent-green: #00e676;
+            --accent-gold: #ffd700;
+            --accent-blue: #0052ff;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.7;
+            padding-bottom: 80px;
+        }
+
+        /* Top Sticky Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(7, 10, 15, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 35px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .nav-brand img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.35);
+        }
+
+        .nav-brand span {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 7px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+            color: #070a0f;
+            border: none;
+            font-weight: 700;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            color: #070a0f;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        /* Document Container */
+        .container {
+            max-width: 900px;
+            margin: 40px auto 0;
+            padding: 0 25px;
+        }
+
+        /* Header Document Hero */
+        .doc-hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: radial-gradient(circle at 50% 30%, rgba(0, 242, 254, 0.08) 0%, rgba(7, 10, 15, 0) 70%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+
+        .doc-hero img {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            margin-bottom: 16px;
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
+        }
+
+        .doc-hero h1 {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .doc-hero .subtitle {
+            font-size: 16px;
+            color: var(--accent-cyan);
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        .meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .badge strong {
+            color: #fff;
+        }
+
+        /* Content Typography */
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 45px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-top: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #cbd5e1;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 18px;
+            color: #cbd5e1;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #fff;
+        }
+
+        /* Callout Box */
+        .callout {
+            background: rgba(0, 242, 254, 0.04);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 24px 0;
+        }
+
+        .callout-gold {
+            background: rgba(255, 215, 0, 0.04);
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .callout-green {
+            background: rgba(0, 230, 118, 0.04);
+            border-left: 4px solid var(--accent-green);
+        }
+
+        /* Spec Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: #e2e8f0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Code Block */
+        pre {
+            background: #04070c;
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 13px;
+            color: #00f2fe;
+            margin: 18px 0;
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--accent-cyan);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <img src="/assets/logo.svg" alt="Thin Coin">
+            <span>Thin Coin <span style="color: var(--accent-cyan);">(THIN)</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="btn">📊 Web3 Hub</a>
+            <a href="https://dexscreener.com/base/0xeaf53cae8ae19509b675cbfd819680d668c28a4e" target="_blank" class="btn" style="color: var(--accent-cyan);">📈 Chart</a>
+            <a href="https://basescan.org/token/0x129af9c585f9a8a0438c79644d03e049ed6291b2" target="_blank" class="btn">🔍 BaseScan</a>
+            <a href="https://app.uniswap.org/swap?outputCurrency=0x129af9c585f9a8a0438c79644d03e049ed6291b2&chain=base" target="_blank" class="btn btn-primary">🦄 Trade THIN</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="doc-hero">
+            <img src="/assets/logo.svg" alt="Thin Coin Emblem">
+            <h1>THIN COIN TECHNICAL WHITEPAPER</h1>
+            <div class="subtitle">Decentralized Sequential-64 CPU Proof-of-Work with On-Chain Loyalty Staking & Automated Market Architecture</div>
+            <div class="meta-badges">
+                <span class="badge">Version: <strong>2.1</strong></span>
+                <span class="badge">Network: <strong>Base Mainnet (8453)</strong></span>
+                <span class="badge">Supply: <strong>21,000,000 THIN</strong></span>
+                <span class="badge">Consensus: <strong>Sequential-64 Keccak</strong></span>
+                <span class="badge">Audit Score: <strong style="color: var(--accent-green);">100% Green</strong></span>
+            </div>
+        </div>
+
+        <h2>1. Abstract & Executive Summary</h2>
+        <p>The proliferation of Proof-of-Work cryptocurrencies has historically succumbed to two failure modes: rapid hardware monopolization by specialized Application-Specific Integrated Circuits (ASICs) and centralized graphics processing unit (GPU) mining farms, or pre-mined token allocations where venture syndicates or founding teams extract liquidity from retail market participants.</p>
+        
+        <p><strong>Thin Coin (<code>THIN</code>)</strong> introduces an equitable Proof-of-Work token architecture deployed directly onto Coinbase’s Ethereum Layer-2 network (<strong>Base Mainnet</strong>). By enforcing a strictly sequential 64-step iterative Keccak-256 hash pipeline, Thin Coin eliminates the parallelization advantage of massively multi-threaded GPUs and fixed-function ASICs. Ordinary consumer hardware—including legacy laptops, standard desktop PCs, and 5-watt single-board computers like the Raspberry Pi—competes on near-parity with enterprise hardware.</p>
+
+        <div class="callout callout-green">
+            <strong>Core Architecture Highlights:</strong>
+            <ul style="margin-top: 8px; margin-bottom: 0;">
+                <li><strong>21,000,000 THIN Hard Cap:</strong> Exact Bitcoin supply trajectory with 210,000-epoch halvings.</li>
+                <li><strong>94.10% Miner Payout:</strong> Ultra-lean 0.90% dev contribution leaves 94.10% directly in miners' hands.</li>
+                <li><strong>300s Anti-Monopoly Cooldown:</strong> Protects low-power home CPUs from multi-block sweeps.</li>
+                <li><strong>On-Chain Loyalty Staking (3.50%):</strong> MasterChef-style auto-compounding via atomic <code>mineAndStake()</code>.</li>
+                <li><strong>Golden Rollover Jackpot (1.50%):</strong> Accrues organically on-chain; 1-in-64 odds (<code>nonce &amp; 0x3F == 0</code>).</li>
+            </ul>
+        </div>
+
+        <h2>2. Sequential-64 Keccak Consensus Engine</h2>
+        <p>To eliminate GPU parallelization, Thin Coin requires that every nonce evaluation execute an irreducible series of 64 sequential Keccak-256 rounds where each step strictly depends on the output of the previous step:</p>
+
+        <pre>Step[0]  = Keccak-256( Challenge || MinerAddress || Nonce )
+Step[i]  = Keccak-256( Step[i-1] || Challenge || i )   for i in [1..63]
+Digest   = Step[63]
+Validity = uint256(Digest) &lt;= EffectiveTarget</pre>
+
+        <p>Because GPU compute units excel at parallel independent evaluations rather than serial recursive loops, standard CPUs achieve near 1:1 hardware efficiency against graphics cards while consuming a fraction of the electricity.</p>
+
+        <h2>3. Comprehensive Tokenomics & Allocation</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Specification</th>
+                    <th>Mechanism &amp; Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Total Hard Cap</strong></td>
+                    <td>21,000,000 THIN</td>
+                    <td>Strict mathematical supply ceiling. Zero inflation beyond cap.</td>
+                </tr>
+                <tr>
+                    <td><strong>Genesis Mint</strong></td>
+                    <td>100,000 THIN (0.476%)</td>
+                    <td>Seeded into AMM liquidity pools &amp; Dev Loyalty Staking timelock.</td>
+                </tr>
+                <tr>
+                    <td><strong>Miner Base Reward</strong></td>
+                    <td>94.10% (47.05 THIN / block)</td>
+                    <td>Minted directly to solving miner wallet or loyalty pool.</td>
+                </tr>
+                <tr>
+                    <td><strong>Loyalty Staking Pool</strong></td>
+                    <td>3.50% (1.75 THIN / block)</td>
+                    <td>Distributed to all THIN stakers with 1e18 precision.</td>
+                </tr>
+                <tr>
+                    <td><strong>Golden Jackpot</strong></td>
+                    <td>1.50% (0.75 THIN / block)</td>
+                    <td>Accumulates until solved by a 1-in-64 Golden Nonce.</td>
+                </tr>
+                <tr>
+                    <td><strong>Protocol Dev Fee</strong></td>
+                    <td>0.90% (0.45 THIN / block)</td>
+                    <td>Long-term infrastructure, telemetry, and faucet maintenance.</td>
+                </tr>
+                <tr>
+                    <td><strong>Target Epoch Time</strong></td>
+                    <td>300 seconds (5 minutes)</td>
+                    <td>Balanced for low L2 gas consumption and decentralization.</td>
+                </tr>
+                <tr>
+                    <td><strong>Difficulty Retarget</strong></td>
+                    <td>Every 10 Epochs</td>
+                    <td>Proportional dampening (0.25x floor, 4.0x ceiling).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>4. Dual-Pool Liquidity & Triangular Arbitrage</h2>
+        <p>Thin Coin deploys an automated two-pool Automated Market Maker (AMM) design on Uniswap V2 on Base:</p>
+        <ul>
+            <li><strong>Pool 1 (THIN / WETH):</strong> Primary fiat/crypto gateway connecting THIN to Ethereum Layer-2 capital.</li>
+            <li><strong>Pool 2 (THIN / FRAC):</strong> Decentralized bridge connecting THIN directly to FractalCoin.</li>
+        </ul>
+        <p>This creates an automated triangular arbitrage rebalancing circuit: <code>WETH &harr; THIN &harr; FRAC &harr; WETH</code>. As decentralized arbitrage bots continuously balance price parity across all three pairs, both pools continuously accumulate Uniswap's 0.30% LP fee, expanding backing depth organically.</p>
+
+        <h2>5. Verified Smart Contract Security Audit</h2>
+        <div class="callout callout-gold">
+            <strong>100% Green Score Architecture:</strong>
+            <ul style="margin-top: 8px; margin-bottom: 0;">
+                <li><strong>No Owner Mint:</strong> The contract contains zero administrative mint functions. New tokens can ONLY be created by submitting a valid Proof-of-Work digest.</li>
+                <li><strong>Zero Transaction Taxes:</strong> 0% buy tax, 0% sell tax, 0% transfer tax. Fully clean standard ERC-20.</li>
+                <li><strong>No Blacklists / Freezes:</strong> No pause function exists in the smart contract. Trading and mining are completely unstoppable.</li>
+                <li><strong>180-Day Liquidity Lock:</strong> 80% of LP tokens are locked inside <code>ThinLPLocker.sol</code> until April 25, 2027.</li>
+                <li><strong>180-Day Dev Loyalty Stake:</strong> 20,000 THIN dev principal is locked inside <code>ThinStakingLocker.sol</code> until April 25, 2027.</li>
+            </ul>
+        </div>
+
+        <h2>6. Verified Base Mainnet Deployments</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Base Mainnet Contract Address</th>
+                    <th>Explorer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>ThinPoWToken (THIN)</strong></td>
+                    <td><code>0x129af9c585f9a8a0438c79644d03e049ed6291b2</code></td>
+                    <td><a href="https://basescan.org/token/0x129af9c585f9a8a0438c79644d03e049ed6291b2" target="_blank" style="color: var(--accent-cyan);">BaseScan ↗</a></td>
+                </tr>
+                <tr>
+                    <td><strong>Uniswap V2 Pair (THIN/WETH)</strong></td>
+                    <td><code>0xeaf53cae8ae19509b675cbfd819680d668c28a4e</code></td>
+                    <td><a href="https://dexscreener.com/base/0xeaf53cae8ae19509b675cbfd819680d668c28a4e" target="_blank" style="color: var(--accent-cyan);">DEXScreener ↗</a></td>
+                </tr>
+                <tr>
+                    <td><strong>ThinLPLocker (LP Vault)</strong></td>
+                    <td><code>0x1c6dc4c09a6db32ea2807cd945763f2d44277b10</code></td>
+                    <td><a href="https://basescan.org/address/0x1c6dc4c09a6db32ea2807cd945763f2d44277b10" target="_blank" style="color: var(--accent-cyan);">BaseScan ↗</a></td>
+                </tr>
+                <tr>
+                    <td><strong>ThinStakingLocker (Dev Vault)</strong></td>
+                    <td><code>0xd6fc354e2ea8c7636fb4bacca443f6b7a13bceb8</code></td>
+                    <td><a href="https://basescan.org/address/0xd6fc354e2ea8c7636fb4bacca443f6b7a13bceb8" target="_blank" style="color: var(--accent-cyan);">BaseScan ↗</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>7. Quick Start: 1-Line Universal Community Miner</h2>
+        <p>Any Linux PC or Raspberry Pi can start mining immediately by running the following single command in terminal:</p>
+        <pre>curl -sSL http://127.0.0.1:7446/install.sh | bash</pre>
+        <p>The installer automatically detects your CPU architecture (x86_64 or ARM64), compiles the native C Sequential Keccak engine, initializes an unlinked miner wallet, and launches continuous background mining with live thermal protection.</p>
+
+        <footer>
+            <p>Thin Coin (THIN) &bull; Open-Source, Permissionless, CPU-First Proof-of-Work Standard &bull; Base Mainnet</p>
+            <p style="margin-top: 8px;"><a href="/">Return to Web3 Live Telemetry Hub</a> &bull; <a href="https://dexscreener.com/base/0xeaf53cae8ae19509b675cbfd819680d668c28a4e" target="_blank">DEXScreener Live Chart</a></p>
+        </footer>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thin Coin (THIN) — 2D Visual Blockchain & Web3 Hub</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #121826;
+            --bg-card: #1a2236;
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-gold: #ffd700;
+            --accent-green: #00e676;
+            --accent-purple: #bb86fc;
+            --text-primary: #f0f4f8;
+            --text-secondary: #94a3b8;
+            --border-color: #2a364f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(180deg, #161f33 0%, var(--bg-primary) 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 20px;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+        }
+
+        .brand-text h1 {
+            font-size: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text p {
+            font-size: 12px;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        /* 2D Blockchain Viewport */
+        .blockchain-section {
+            padding: 12px 35px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .canvas-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        #blockchainCanvas {
+            width: 100%;
+            height: 100px;
+            display: block;
+            cursor: grab;
+        }
+
+        #blockchainCanvas:active {
+            cursor: grabbing;
+        }
+
+        .chain-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .timeline-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 14px;
+            background: rgba(14, 20, 32, 0.95);
+            border-top: 1px solid var(--border-color);
+            gap: 10px;
+        }
+
+        .canvas-stats-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 4px 12px;
+            background: rgba(10, 14, 23, 0.95);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 11px;
+            overflow-x: auto;
+        }
+
+        .user-block-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulseGreen 2.5s infinite ease-in-out;
+        }
+
+        @keyframes pulseGreen {
+            0%, 100% { opacity: 0.4; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        .mini-stat {
+            background: rgba(18, 26, 42, 0.7);
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .mini-stat span {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        /* Dashboard Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            padding: 0 35px;
+            margin-top: 15px;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .card h2 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .metric-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Staking & TimeLock Styles */
+        .lock-badge {
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .lock-timer {
+            font-family: monospace;
+            font-size: 20px;
+            color: var(--accent-gold);
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            margin: 12px 0;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <img src="/assets/logo.svg" alt="Thin Coin" style="width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 0 16px rgba(0, 242, 254, 0.45); cursor: pointer;" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" />
+            <div class="brand-text">
+                <h1>Thin Coin <span style="font-size: 14px; color: var(--accent-cyan); font-weight: normal;">(THIN)</span></h1>
+                <p>Sequential-64 CPU PoW • Base Mainnet</p>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <a href="/whitepaper" class="btn" style="text-decoration: none; color: #ffd700; display: inline-flex; align-items: center; gap: 4px;">📄 Whitepaper</a>
+            <a href="https://dexscreener.com/base/0xeaf53cae8ae19509b675cbfd819680d668c28a4e" target="_blank" class="btn" style="text-decoration: none; color: var(--accent-cyan); display: inline-flex; align-items: center; gap: 4px;">📈 DEXScreener</a>
+            <a href="https://app.uniswap.org/swap?outputCurrency=0x129af9c585f9a8a0438c79644d03e049ed6291b2&chain=base" target="_blank" class="btn" style="text-decoration: none; color: #ff007a; display: inline-flex; align-items: center; gap: 4px;">🦄 Buy THIN</a>
+            <a href="https://basescan.org/token/0x129af9c585f9a8a0438c79644d03e049ed6291b2" target="_blank" class="btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">🔍 BaseScan</a>
+            <button class="btn" id="addMetaMaskBtn">🦊 Add to MetaMask</button>
+            <button class="btn btn-primary" id="connectWalletBtn">Connect Wallet</button>
+        </div>
+    </header>
+
+    <!-- 2D Real-Time Visual Blockchain (Elegant Holographic Stream) -->
+    <section class="blockchain-section">
+        <div class="section-header">
+            <div class="section-title">
+                <span>⛓️ Cryptographic Blockchain Stream</span>
+                <span class="lock-badge user-block-indicator"><span class="pulse-dot"></span> Pulsing Green = Blocks You Solved</span>
+            </div>
+            <div class="chain-controls">
+                <button class="btn" id="scrollLeftBtn" style="padding: 7px 14px; font-size: 13px;">◀ Browse Earlier</button>
+                <button class="btn" id="scrollRightBtn" style="padding: 7px 14px; font-size: 13px;">Browse Next ▶</button>
+                <button class="btn btn-primary" id="jumpLatestBtn" style="padding: 7px 16px; font-size: 13px;">⚡ Jump to Live Head</button>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <div class="canvas-stats-bar">
+                <div class="mini-stat">Target: <span id="overlayTarget">0x000000...</span></div>
+                <div class="mini-stat">Jackpot: <span id="overlayJackpot">0.00 THIN</span></div>
+                <div class="mini-stat">Cooldown: <span>300s Protected</span></div>
+                <div class="mini-stat">Scroll: <span>Drag / Scrubber</span></div>
+            </div>
+            <canvas id="blockchainCanvas"></canvas>
+            
+            <!-- Interactive Scrubber Bar -->
+            <div class="timeline-bar">
+                <span style="font-size: 10px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Genesis (#0)</span>
+                <input type="range" id="blockScrubber" min="0" max="100" value="100" style="flex: 1; accent-color: var(--accent-cyan); cursor: pointer;" />
+                <span style="font-size: 10px; color: var(--accent-cyan); font-weight: 800; text-transform: uppercase;" id="liveHeadLabel">Live Head</span>
+            </div>
+            <div id="blockTooltip" style="display: none; position: absolute; background: rgba(10, 14, 23, 0.95); backdrop-filter: blur(12px); border: 1px solid var(--accent-cyan); border-radius: 6px; padding: 10px; font-size: 11px; pointer-events: none; z-index: 100; box-shadow: 0 0 20px rgba(0,242,254,0.35);"></div>
+        </div>
+    </section>
+
+    <!-- Dashboard Content Grid -->
+    <div class="grid">
+        <!-- User Wallet, Mining & Jackpot Telemetry Card -->
+        <div class="card" style="border-color: rgba(0, 230, 118, 0.45); box-shadow: 0 0 25px rgba(0, 230, 118, 0.08);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <h2 style="margin: 0; padding: 0; border: none; font-size: 16px;">Your Mining Portfolio</h2>
+                <span id="userAddressPill" class="tag tag-miner" style="font-family: monospace; font-size: 11px;">0x6174...13F1</span>
+            </div>
+            
+            <div style="margin-top: 10px;">
+                <div class="metric-sub" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Total THIN Balance:</div>
+                <div class="metric-value" id="userTotalBalanceDisplay" style="color: var(--accent-green); font-size: 28px; text-shadow: 0 0 15px rgba(0, 230, 118, 0.25);">46,007.70 THIN</div>
+                
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+                    <span class="badge" style="font-size: 11px; padding: 2px 8px;">Liquid: <strong id="userLiquidDisplay" style="color: #fff;">45,016.65</strong></span>
+                    <span class="badge" style="font-size: 11px; padding: 2px 8px;">Staked: <strong id="userStakedMetricDisplay" style="color: var(--accent-gold);">991.05</strong></span>
+                    <span class="badge" style="font-size: 11px; padding: 2px 8px;">Pending: <strong id="userPendingDisplay" style="color: var(--accent-cyan);">+1.85</strong></span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 10px;">
+                <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 8px; padding: 8px; text-align: center;">
+                    <div style="font-size: 10px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Blocks Mined</div>
+                    <div id="userBlocksMinedDisplay" style="font-size: 22px; font-weight: 900; color: var(--accent-cyan); margin-top: 2px;">21</div>
+                    <div style="font-size: 10px; color: var(--accent-cyan);">⛏️ On-Chain Solved</div>
+                </div>
+
+                <div style="background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.25); border-radius: 8px; padding: 8px; text-align: center;">
+                    <div style="font-size: 10px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Jackpot Wins</div>
+                    <div id="userJackpotWinsDisplay" style="font-size: 22px; font-weight: 900; color: var(--accent-gold); margin-top: 2px;">1</div>
+                    <div style="font-size: 10px; color: var(--accent-gold);">⭐ 1-in-64 Hit!</div>
+                </div>
+            </div>
+
+            <!-- Send THIN to Friend Form -->
+            <div style="margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-size: 11px; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Send THIN to Friend:</span>
+                    <span style="font-size: 10px; color: var(--accent-cyan); cursor: pointer; text-decoration: underline;" onclick="document.getElementById('sendAmountInput').value = (document.getElementById('userLiquidDisplay').innerText || '0').replace(/,/g, '');">MAX</span>
+                </div>
+                <input type="text" id="sendRecipientInput" placeholder="Friend's Address (0x...)" style="width: 100%; margin-bottom: 6px; font-size: 11px; padding: 6px 10px; font-family: monospace;" />
+                <div style="display: flex; gap: 6px;">
+                    <input type="text" id="sendAmountInput" placeholder="Amount (THIN)" style="flex: 1; font-size: 11px; padding: 6px 10px;" />
+                    <button id="sendThinBtn" class="btn btn-primary" style="padding: 6px 14px; font-size: 12px; font-weight: 700; white-space: nowrap;">💸 Send THIN</button>
+                </div>
+                <div id="transferStatusMsg" style="font-size: 11px; margin-top: 6px; color: var(--accent-green); display: none; word-break: break-all;"></div>
+            </div>
+        </div>
+
+        <!-- Live Mining Stats -->
+        <div class="card">
+            <h2>Current Epoch <span class="lock-badge" id="blockStatusBadge">Network Open</span></h2>
+            <div class="metric-value" id="currentEpochDisplay">#1</div>
+            <div class="metric-sub">Block Reward: <strong>47.05 THIN</strong> to Miner (94.10%)</div>
+            <div class="metric-sub" style="margin-top: 4px;">Dev Protocol Contribution: <strong>0.90%</strong></div>
+            <div class="metric-sub" style="margin-top: 4px;">Difficulty Retarget: Every 10 Epochs</div>
+            <div style="margin-top: 14px; border-top: 1px solid var(--border-color); padding-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-size: 12px; color: var(--text-secondary);">Your Local Miner:</span>
+                    <span id="minerStatusPill" class="tag tag-dev" style="font-size: 11px;">○ STOPPED</span>
+                </div>
+                <button id="toggleMinerBtn" class="btn" style="width: 100%; padding: 8px 12px; font-weight: 700; background: rgba(0, 230, 118, 0.2); border-color: #00e676; color: #00e676;">🚀 Start Miner (2 Cores)</button>
+            </div>
+        </div>
+
+        <!-- Golden Jackpot Pot Card -->
+        <div class="card" style="border-color: rgba(255, 215, 0, 0.4); box-shadow: 0 0 20px rgba(255, 215, 0, 0.08);">
+            <h2>Golden Jackpot Pot <span class="lock-badge" style="background: rgba(255, 215, 0, 0.15); border-color: var(--accent-gold); color: var(--accent-gold);">⭐ 1-in-64 Odds</span></h2>
+            <div class="metric-value" id="jackpotDisplay" style="color: var(--accent-gold); font-size: 30px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.35);">0.75 THIN</div>
+            <div class="metric-sub">Accumulator: <strong>1.50%</strong> of every block added to pot</div>
+            <div class="metric-sub" style="margin-top: 4px;">Trigger Mask: <code style="color: #ffd700; font-family: monospace;">nonce &amp; 0x3F == 0</code></div>
+            <div class="metric-sub" style="margin-top: 4px;">Miner Payout: <strong>Winner takes 100% of accumulated pot</strong></div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-top: 8px; border-top: 1px solid rgba(255, 215, 0, 0.15); padding-top: 6px;">
+                <span>Status: <strong style="color: #ffd700;">Organic Growth Active</strong></span>
+                <span id="jackpotHistoryStatus" style="color: var(--text-secondary);">Starts at 0.0 THIN</span>
+            </div>
+        </div>
+
+        <!-- Dev Loyalty Staking TimeLock Contract -->
+        <div class="card">
+            <h2>Dev Loyalty Staking TimeLock <span class="lock-badge">Verifiable Vault</span></h2>
+            <div class="metric-sub">Principal locked by Dev inside Loyalty Pool:</div>
+            <div class="metric-value" id="devLockedPrincipal" style="color: var(--accent-gold);">20,000.00 THIN</div>
+            <div class="metric-sub">On-Chain Unlock Countdown:</div>
+            <div class="lock-timer" id="devLockTimer">179d : 23h : 59m : 55s</div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-top: 6px;">
+                <span>Audit: <strong style="color: #fff;">ThinStakingLocker.sol</strong></span>
+                <a href="https://basescan.org/address/0xd6fc354e2ea8c7636fb4bacca443f6b7a13bceb8" target="_blank" style="color: var(--accent-gold); text-decoration: none;">View Vault on BaseScan ↗</a>
+            </div>
+        </div>
+
+        <!-- User Loyalty Staking Pool -->
+        <div class="card">
+            <h2>Loyalty Pool Staking <span class="lock-badge">3.50% Drip</span></h2>
+            <div class="metric-value" id="userStakedDisplay">0.00 THIN</div>
+            <div class="metric-sub">Your Pending Yield: <strong id="pendingYieldDisplay" style="color: var(--accent-green);">0.0000 THIN</strong></div>
+            <div style="margin-top: 14px;">
+                <input type="text" id="stakeAmountInput" placeholder="Amount of THIN (leave blank for ALL)" />
+                <div class="button-group">
+                    <button class="btn btn-primary" style="flex: 1;" id="stakeBtn">Stake</button>
+                    <button class="btn" style="flex: 1;" id="unstakeBtn">Unstake</button>
+                    <button class="btn" style="flex: 1; color: var(--accent-green); border-color: var(--accent-green);" id="claimYieldBtn">Harvest</button>
+                </div>
+                <div id="stakingStatusMsg" style="font-size: 11px; margin-top: 8px; color: var(--accent-cyan); display: none; font-weight: 600;"></div>
+            </div>
+        </div>
+
+        <!-- Verified Liquidity TimeLock Shield -->
+        <div class="card" style="border-color: rgba(0, 242, 254, 0.4); box-shadow: 0 0 20px rgba(0, 242, 254, 0.08);">
+            <h2>Verified Liquidity Lock <span class="lock-badge" style="background: rgba(0, 242, 254, 0.15); border-color: var(--accent-cyan); color: var(--accent-cyan);">Uniswap V2</span></h2>
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <div class="metric-sub">Pool: <strong>THIN / WETH</strong> (Cash Gateway)</div>
+                <span class="tag tag-pool" style="font-size: 10px;">🔒 80% Locked</span>
+            </div>
+            <div class="metric-value" id="lpLockedAmount" style="color: var(--accent-cyan); font-size: 24px; margin-top: 8px;">35,000 THIN + 0.0058 ETH</div>
+            <div class="metric-sub">Live Countdown to Unlock:</div>
+            <div class="lock-timer" id="lpLockTimer" style="color: var(--accent-cyan); font-size: 20px; border-color: rgba(0, 242, 254, 0.3);">
+                179d : 23h : 59m : 55s
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-top: 6px;">
+                <span>Audit: <strong style="color: #fff;">ThinLPLocker.sol</strong></span>
+                <a href="https://basescan.org/address/0x1c6dc4c09a6db32ea2807cd945763f2d44277b10" target="_blank" style="color: var(--accent-cyan); text-decoration: none;">View Locker on BaseScan ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------------------------------------------------------------------
+        // Elegant Holographic Blockchain Stream with Smooth Scrolling & User Glow
+        // ---------------------------------------------------------------------
+        const canvas = document.getElementById("blockchainCanvas");
+        const ctx = canvas.getContext("2d");
+        const tooltip = document.getElementById("blockTooltip");
+        const scrubber = document.getElementById("blockScrubber");
+
+        // Connected user / default dev rig address
+        let currentUserWallet = "0x617418435ba8782feaa3756d0c853ecd1a7713f1".toLowerCase();
+        let minerRunning = false;
+        let minerPid = null;
+
+        // Real Mined Blocks starting with Genesis Block (#0)
+        let blocks = [
+            { epoch: 0, miner: "0x617418435ba8782FEaa3756d0c853eCd1a7713F1", reward: "100,000 THIN", golden: false, nonce: 0, time: "Genesis", hash: "0x129af9c585f9a8a0" }
+        ];
+
+        // Compact Layout Geometry (Half Size: 100px Viewport)
+        const cardWidth = 110;
+        const cardHeight = 70;
+        const cardGap = 28;
+        let totalItems = blocks.length + 1; // historical + 1 active forging block
+        let totalChainWidth = totalItems * (cardWidth + cardGap);
+
+        let panX = 0;
+        let targetPanX = 0;
+        let isDragging = false;
+        let dragStartX = 0;
+        let startPanX = 0;
+        let pulsePhase = 0;
+        let renderedNodes = [];
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
+            canvas.height = 100 * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            clampPan();
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        function clampPan() {
+            const w = canvas.parentElement.clientWidth;
+            const minPan = Math.min(0, w - totalChainWidth - 80);
+            const maxPan = 60;
+            targetPanX = Math.max(Math.min(targetPanX, maxPan), minPan);
+        }
+
+        // Initialize view pointing to the latest block (right edge)
+        function jumpToHead() {
+            const w = canvas.parentElement.clientWidth;
+            targetPanX = w - totalChainWidth - 60;
+            clampPan();
+            syncScrubber();
+        }
+
+        jumpToHead();
+        panX = targetPanX;
+
+        // Mouse Drag Panning
+        canvas.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            dragStartX = e.clientX;
+            startPanX = targetPanX;
+            canvas.style.cursor = "grabbing";
+        });
+
+        window.addEventListener("mouseup", () => {
+            isDragging = false;
+            canvas.style.cursor = "grab";
+        });
+
+        window.addEventListener("mousemove", (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            const my = e.clientY - rect.top;
+
+            if (isDragging) {
+                const delta = e.clientX - dragStartX;
+                targetPanX = startPanX + delta;
+                clampPan();
+                syncScrubber();
+            }
+
+            checkBlockHover(mx, my);
+        });
+
+        // Mousewheel Horizontal Scrolling
+        canvas.addEventListener("wheel", (e) => {
+            e.preventDefault();
+            const delta = (e.deltaX !== 0 ? -e.deltaX : -e.deltaY) * 1.5;
+            targetPanX += delta;
+            clampPan();
+            syncScrubber();
+        }, { passive: false });
+
+        // Scrubber Slider
+        scrubber.addEventListener("input", (e) => {
+            const val = parseFloat(e.target.value) / 100.0;
+            const w = canvas.parentElement.clientWidth;
+            const minPan = Math.min(0, w - totalChainWidth - 80);
+            const maxPan = 60;
+            targetPanX = maxPan - val * (maxPan - minPan);
+            clampPan();
+        });
+
+        function syncScrubber() {
+            const w = canvas.parentElement.clientWidth;
+            const minPan = Math.min(0, w - totalChainWidth - 80);
+            const maxPan = 60;
+            const range = maxPan - minPan;
+            if (range !== 0) {
+                const fraction = (maxPan - targetPanX) / range;
+                scrubber.value = Math.round(fraction * 100);
+            }
+        }
+
+        // Navigation Buttons
+        document.getElementById("scrollLeftBtn").addEventListener("click", () => {
+            targetPanX += (cardWidth + cardGap) * 1.5;
+            clampPan();
+            syncScrubber();
+        });
+
+        document.getElementById("scrollRightBtn").addEventListener("click", () => {
+            targetPanX -= (cardWidth + cardGap) * 1.5;
+            clampPan();
+            syncScrubber();
+        });
+
+        document.getElementById("jumpLatestBtn").addEventListener("click", () => {
+            jumpToHead();
+        });
+
+        // Hover Tooltip Check
+        function checkBlockHover(mx, my) {
+            let found = null;
+            for (let node of renderedNodes) {
+                if (mx >= node.x && mx <= node.x + node.w && my >= node.y && my <= node.y + node.h) {
+                    found = node.data;
+                    break;
+                }
+            }
+
+            if (found) {
+                const isUser = found.miner.toLowerCase() === currentUserWallet;
+                tooltip.style.display = "block";
+                tooltip.style.left = Math.min(mx + 15, canvas.parentElement.clientWidth - 280) + "px";
+                tooltip.style.top = Math.max(my - 30, 20) + "px";
+                tooltip.innerHTML = `
+                    <div style="font-weight: 800; font-size: 14px; color: ${found.golden ? 'var(--accent-gold)' : (isUser ? 'var(--accent-green)' : 'var(--accent-cyan)')};">
+                        Epoch #${found.epoch} ${isUser ? '⚡ [YOUR BLOCK]' : ''} ${found.golden ? '⭐ [GOLDEN JACKPOT]' : ''}
+                    </div>
+                    <div style="margin-top: 6px; color: var(--text-secondary);">Hash: <span style="color: #fff; font-family: monospace;">${found.hash}</span></div>
+                    <div style="color: var(--text-secondary);">Nonce: <span style="color: #fff; font-weight: 700;">${found.nonce.toLocaleString()}</span></div>
+                    <div style="color: var(--text-secondary);">Miner: <span style="color: #fff; font-family: monospace;">${found.miner}</span></div>
+                    <div style="color: var(--text-secondary);">Reward: <span style="color: var(--accent-green); font-weight: 700;">+${found.reward}</span></div>
+                    <div style="color: var(--text-secondary);">Solved: <span style="color: #fff;">${found.time}</span></div>
+                `;
+            } else {
+                tooltip.style.display = "none";
+            }
+        }
+
+        // ---------------------------------------------------------------------
+        // Render Loop (Scaled Half-Size: 100px Viewport)
+        // ---------------------------------------------------------------------
+        function draw() {
+            const w = canvas.parentElement.clientWidth;
+            const h = 100;
+            ctx.clearRect(0, 0, w, h);
+
+            // Smooth spring damping for pan
+            panX += (targetPanX - panX) * 0.14;
+            pulsePhase += 0.035;
+
+            // Slow pulsing wave for user-solved blocks (~4.2s breathing cycle)
+            const slowGreenPulse = (Math.sin(pulsePhase * 0.9) + 1) / 2;
+
+            const cardY = (h - cardHeight) / 2;
+            renderedNodes = [];
+
+            // 1. Draw Subtle Tech Background Grid
+            ctx.save();
+            ctx.strokeStyle = "rgba(42, 54, 79, 0.25)";
+            ctx.lineWidth = 1;
+            const gridOffset = panX % 40;
+            for (let x = gridOffset; x < w; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, h);
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            // 2. Draw Connected Optical Fiber Bus Conduits
+            ctx.save();
+            for (let i = 0; i < totalItems - 1; i++) {
+                const x1 = panX + 60 + i * (cardWidth + cardGap) + cardWidth;
+                const x2 = x1 + cardGap;
+                const midY = cardY + cardHeight / 2;
+
+                // Dual Laser Rails
+                ctx.strokeStyle = "rgba(0, 242, 254, 0.35)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x1, midY - 4);
+                ctx.lineTo(x2, midY - 4);
+                ctx.moveTo(x1, midY + 4);
+                ctx.lineTo(x2, midY + 4);
+                ctx.stroke();
+
+                // Center Cryptographic Conduit Line
+                ctx.strokeStyle = "rgba(0, 242, 254, 0.6)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x1, midY);
+                ctx.lineTo(x2, midY);
+                ctx.stroke();
+
+                // Moving Energy Photons
+                const photonPos = ((pulsePhase * 30 + i * 15) % cardGap);
+                ctx.fillStyle = "#00f2fe";
+                ctx.shadowColor = "#00f2fe";
+                ctx.shadowBlur = 4;
+                ctx.beginPath();
+                ctx.arc(x1 + photonPos, midY, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Inter-block Hash Connector Node
+                ctx.fillStyle = "#161e33";
+                ctx.strokeStyle = "#00f2fe";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(x1 + cardGap / 2, midY, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            // 3. Render Historical Mined Blocks (Starting with Genesis Block #0)
+            for (let i = 0; i < blocks.length; i++) {
+                const b = blocks[i];
+                const bx = panX + 60 + i * (cardWidth + cardGap);
+                const isUser = b.miner.toLowerCase() === currentUserWallet;
+
+                // Viewport Culling
+                if (bx + cardWidth < -100 || bx > w + 100) continue;
+
+                renderedNodes.push({ x: bx, y: cardY, w: cardWidth, h: cardHeight, data: b });
+
+                ctx.save();
+
+                // SLOW PULSING GREEN EFFECT (User-Solved Blocks)
+                if (isUser) {
+                    const glowBlur = 8 + slowGreenPulse * 12;
+                    const glowAlpha = 0.35 + slowGreenPulse * 0.55;
+
+                    ctx.shadowColor = `rgba(0, 230, 118, ${glowAlpha})`;
+                    ctx.shadowBlur = glowBlur;
+
+                    const userGrad = ctx.createLinearGradient(bx, cardY, bx, cardY + cardHeight);
+                    userGrad.addColorStop(0, "rgba(10, 32, 22, 0.95)");
+                    userGrad.addColorStop(1, "rgba(7, 18, 14, 0.98)");
+                    ctx.fillStyle = userGrad;
+
+                    ctx.strokeStyle = `rgba(0, 230, 118, ${0.5 + slowGreenPulse * 0.5})`;
+                    ctx.lineWidth = 1.5;
+                } else if (b.golden) {
+                    ctx.shadowColor = "rgba(255, 215, 0, 0.75)";
+                    ctx.shadowBlur = 10;
+
+                    const goldGrad = ctx.createLinearGradient(bx, cardY, bx, cardY + cardHeight);
+                    goldGrad.addColorStop(0, "rgba(35, 26, 8, 0.95)");
+                    goldGrad.addColorStop(1, "rgba(18, 14, 5, 0.98)");
+                    ctx.fillStyle = goldGrad;
+
+                    ctx.strokeStyle = "#ffd700";
+                    ctx.lineWidth = 1.5;
+                } else {
+                    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+                    ctx.shadowBlur = 6;
+
+                    const glassGrad = ctx.createLinearGradient(bx, cardY, bx, cardY + cardHeight);
+                    glassGrad.addColorStop(0, "rgba(22, 30, 48, 0.92)");
+                    glassGrad.addColorStop(1, "rgba(13, 18, 30, 0.96)");
+                    ctx.fillStyle = glassGrad;
+
+                    ctx.strokeStyle = "rgba(42, 58, 88, 0.8)";
+                    ctx.lineWidth = 1;
+                }
+
+                // Render Beveled Card Rectangle
+                ctx.beginPath();
+                ctx.roundRect(bx, cardY, cardWidth, cardHeight, 7);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+
+                // Block Top Header Strip
+                ctx.save();
+                ctx.fillStyle = isUser ? "rgba(0, 230, 118, 0.15)" : (b.golden ? "rgba(255, 215, 0, 0.15)" : "rgba(255, 255, 255, 0.04)");
+                ctx.beginPath();
+                ctx.roundRect(bx + 1, cardY + 1, cardWidth - 2, 16, [6, 6, 0, 0]);
+                ctx.fill();
+
+                // Status Badge / Icon
+                if (isUser) {
+                    ctx.fillStyle = `rgba(0, 230, 118, ${0.7 + slowGreenPulse * 0.3})`;
+                    ctx.font = "bold 8px sans-serif";
+                    ctx.fillText("⚡ YOU", bx + 7, cardY + 11.5);
+
+                    // Pulsing Dot
+                    ctx.beginPath();
+                    ctx.arc(bx + cardWidth - 8, cardY + 8.5, 2 + slowGreenPulse, 0, Math.PI * 2);
+                    ctx.fillStyle = "#00e676";
+                    ctx.fill();
+                } else if (b.golden) {
+                    ctx.fillStyle = "#ffd700";
+                    ctx.font = "bold 8px sans-serif";
+                    ctx.fillText("⭐ JACKPOT", bx + 7, cardY + 11.5);
+                } else if (b.epoch === 0) {
+                    ctx.fillStyle = "var(--accent-cyan)";
+                    ctx.font = "bold 8px sans-serif";
+                    ctx.fillText("🏛️ GENESIS", bx + 7, cardY + 11.5);
+                } else {
+                    ctx.fillStyle = "var(--text-secondary)";
+                    ctx.font = "8px sans-serif";
+                    ctx.fillText(`Solved ${b.time}`, bx + 7, cardY + 11.5);
+                }
+
+                // Main Epoch Number
+                ctx.fillStyle = isUser ? "#00e676" : (b.golden ? "#ffd700" : "#00f2fe");
+                ctx.font = "bold 11px -apple-system, BlinkMacSystemFont, sans-serif";
+                ctx.fillText(b.epoch === 0 ? "Genesis #0" : `Epoch #${b.epoch}`, bx + 7, cardY + 29);
+
+                // Nonce & Miner Info
+                ctx.fillStyle = "rgba(148, 163, 184, 0.9)";
+                ctx.font = "8px monospace";
+                ctx.fillText(`N: ${b.nonce.toLocaleString()}`, bx + 7, cardY + 40);
+                ctx.fillText(`${b.miner.slice(0, 5)}...${b.miner.slice(-3)}`, bx + 7, cardY + 50);
+
+                // Reward Tag (Bottom Footer)
+                ctx.fillStyle = "rgba(0, 230, 118, 0.15)";
+                ctx.beginPath();
+                ctx.roundRect(bx + 6, cardY + 54, cardWidth - 12, 12, 3);
+                ctx.fill();
+
+                ctx.fillStyle = "#00e676";
+                ctx.font = "bold 8px sans-serif";
+                ctx.fillText(`+${b.reward.replace(' THIN', '')} THIN`, bx + 9, cardY + 63);
+
+                ctx.restore();
+            }
+
+            // 4. Render Active Forging Station (Live Head)
+            const headX = panX + 60 + blocks.length * (cardWidth + cardGap);
+            const nextEpoch = blocks.length > 0 ? (blocks[blocks.length - 1].epoch + 1) : 1;
+
+            if (headX < w + 200) {
+                ctx.save();
+                if (minerRunning) {
+                    const activePulse = Math.sin(pulsePhase * 2.5) * 5 + 8;
+                    ctx.shadowColor = "rgba(0, 230, 118, 0.85)";
+                    ctx.shadowBlur = activePulse;
+                    ctx.strokeStyle = "#00e676";
+                    ctx.lineWidth = 1.5;
+                    ctx.setLineDash([5, 3]);
+                    ctx.lineDashOffset = -pulsePhase * 12;
+
+                    const forgeGrad = ctx.createLinearGradient(headX, cardY, headX, cardY + cardHeight);
+                    forgeGrad.addColorStop(0, "rgba(8, 38, 22, 0.92)");
+                    forgeGrad.addColorStop(1, "rgba(5, 20, 12, 0.98)");
+                    ctx.fillStyle = forgeGrad;
+
+                    ctx.beginPath();
+                    ctx.roundRect(headX, cardY, cardWidth, cardHeight, 7);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // Header
+                    ctx.save();
+                    ctx.fillStyle = "rgba(0, 230, 118, 0.15)";
+                    ctx.beginPath();
+                    ctx.roundRect(headX + 1, cardY + 1, cardWidth - 2, 16, [6, 6, 0, 0]);
+                    ctx.fill();
+
+                    ctx.fillStyle = "#00e676";
+                    ctx.font = "bold 8px sans-serif";
+                    ctx.fillText("⛏️ ACTIVE", headX + 7, cardY + 11.5);
+
+                    ctx.fillStyle = "#00f2fe";
+                    ctx.font = "bold 11px sans-serif";
+                    ctx.fillText(`Epoch #${nextEpoch}`, headX + 7, cardY + 29);
+
+                    const liveAttempts = (Math.floor(pulsePhase * 45000) % 250000) + 12000;
+                    ctx.fillStyle = "#ffd700";
+                    ctx.font = "bold 8px sans-serif";
+                    ctx.fillText("⚡ HASHING...", headX + 7, cardY + 40);
+
+                    ctx.fillStyle = "rgba(148, 163, 184, 0.85)";
+                    ctx.font = "8px monospace";
+                    ctx.fillText(`N: ${(liveAttempts % 99999).toLocaleString()}`, headX + 7, cardY + 50);
+                    ctx.fillText(`PID: ${minerPid || 'Active'}`, headX + 7, cardY + 62);
+                    ctx.restore();
+                } else {
+                    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+                    ctx.shadowBlur = 6;
+                    ctx.strokeStyle = "rgba(100, 116, 139, 0.5)";
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([4, 3]);
+
+                    const forgeGrad = ctx.createLinearGradient(headX, cardY, headX, cardY + cardHeight);
+                    forgeGrad.addColorStop(0, "rgba(22, 30, 48, 0.85)");
+                    forgeGrad.addColorStop(1, "rgba(13, 18, 30, 0.95)");
+                    ctx.fillStyle = forgeGrad;
+
+                    ctx.beginPath();
+                    ctx.roundRect(headX, cardY, cardWidth, cardHeight, 7);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // Header
+                    ctx.save();
+                    ctx.fillStyle = "rgba(100, 116, 139, 0.15)";
+                    ctx.beginPath();
+                    ctx.roundRect(headX + 1, cardY + 1, cardWidth - 2, 16, [6, 6, 0, 0]);
+                    ctx.fill();
+
+                    ctx.fillStyle = "rgba(148, 163, 184, 0.8)";
+                    ctx.font = "bold 8px sans-serif";
+                    ctx.fillText("🌐 TARGET", headX + 7, cardY + 11.5);
+
+                    ctx.fillStyle = "#94a3b8";
+                    ctx.font = "bold 11px sans-serif";
+                    ctx.fillText(`Epoch #${nextEpoch}`, headX + 7, cardY + 29);
+
+                    ctx.fillStyle = "#ff6666";
+                    ctx.font = "bold 8px sans-serif";
+                    ctx.fillText("○ STOPPED", headX + 7, cardY + 40);
+
+                    ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
+                    ctx.font = "8px monospace";
+                    ctx.fillText("Base Target", headX + 7, cardY + 50);
+                    ctx.fillText("Click 'Start'", headX + 7, cardY + 62);
+                    ctx.restore();
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        requestAnimationFrame(draw);
+
+        // ---------------------------------------------------------------------
+        // Real-Time Telemetry & Block Synchronization Engine
+        // ---------------------------------------------------------------------
+        async function fetchState() {
+            try {
+                const res = await fetch("/api/state");
+                if (!res.ok) return;
+                const data = await res.json();
+
+                if (data.blocks && data.blocks.length > 0) {
+                    const prevLen = blocks.length;
+                    blocks = data.blocks;
+                    totalItems = blocks.length + 1;
+                    totalChainWidth = totalItems * (cardWidth + cardGap);
+                    if (blocks.length !== prevLen) {
+                        clampPan();
+                        jumpToHead();
+                    }
+                }
+
+                if (data.epochCount !== undefined) {
+                    const epochEl = document.getElementById("currentEpochDisplay");
+                    if (epochEl) epochEl.innerText = `#${data.epochCount + 1}`;
+                    if (data.miningTarget) {
+                        const targetEl = document.getElementById("overlayTarget");
+                        if (targetEl) targetEl.innerText = data.miningTarget.slice(0, 10) + "...";
+                    }
+                    const jackpotEl = document.getElementById("overlayJackpot");
+                    if (jackpotEl) jackpotEl.innerText = `${data.jackpotPot || '0.00'} THIN`;
+                    const mainJackpotEl = document.getElementById("jackpotDisplay");
+                    if (mainJackpotEl) mainJackpotEl.innerText = `${data.jackpotPot || '0.00'} THIN`;
+                    const nextEpoch = data.epochCount + 1;
+                    const headLabel = document.getElementById("liveHeadLabel");
+                    if (headLabel) headLabel.innerText = `Live Head (#${nextEpoch})`;
+                }
+
+                if (data.totalStaked !== undefined) {
+                    const userStaked = document.getElementById("userStakedDisplay");
+                    if (userStaked) userStaked.innerText = `${data.totalStaked} THIN`;
+                }
+
+                if (data.devStakingLocker && data.devStakingLocker.lockedPrincipal) {
+                    const devLocked = document.getElementById("devLockedPrincipal");
+                    if (devLocked) devLocked.innerText = `${data.devStakingLocker.lockedPrincipal} THIN`;
+                }
+
+                if (data.userStats) {
+                    renderUserStats(data.userStats);
+                }
+            } catch (err) {
+                console.error("Telemetry sync error:", err);
+            }
+        }
+
+        function renderUserStats(u) {
+            if (!u) return;
+            const addrPill = document.getElementById("userAddressPill");
+            if (addrPill) {
+                addrPill.innerText = u.address ? `${u.address.slice(0, 6)}...${u.address.slice(-4)}` : "0x6174...13F1";
+                addrPill.title = u.address;
+            }
+            const totalEl = document.getElementById("userTotalBalanceDisplay");
+            if (totalEl && u.totalBalance !== undefined) totalEl.innerText = `${u.totalBalance} THIN`;
+            const liquidEl = document.getElementById("userLiquidDisplay");
+            if (liquidEl && u.liquidBalance !== undefined) liquidEl.innerText = u.liquidBalance;
+            const stakedEl = document.getElementById("userStakedMetricDisplay");
+            if (stakedEl && u.stakedBalance !== undefined) stakedEl.innerText = u.stakedBalance;
+            const pendingEl = document.getElementById("userPendingDisplay");
+            if (pendingEl && u.pendingYield !== undefined) pendingEl.innerText = `+${u.pendingYield}`;
+            const blocksMinedEl = document.getElementById("userBlocksMinedDisplay");
+            if (blocksMinedEl && u.blocksMined !== undefined) blocksMinedEl.innerText = u.blocksMined;
+            const jackpotWinsEl = document.getElementById("userJackpotWinsDisplay");
+            if (jackpotWinsEl && u.jackpotWins !== undefined) jackpotWinsEl.innerText = u.jackpotWins;
+        }
+
+        async function fetchUserStats(addr) {
+            try {
+                const target = addr || currentUserWallet;
+                const res = await fetch(`/api/user?address=${target}`);
+                if (!res.ok) return;
+                const u = await res.json();
+                renderUserStats(u);
+            } catch (e) {}
+        }
+
+        setInterval(fetchState, 2000);
+        fetchState();
+
+        // ---------------------------------------------------------------------
+        // Background Miner Daemon Controls
+        // ---------------------------------------------------------------------
+        async function checkMinerStatus() {
+            try {
+                const res = await fetch("/api/miner/status");
+                if (!res.ok) return;
+                const data = await res.json();
+                minerRunning = data.running;
+                minerPid = (data.pids && data.pids.length > 0) ? data.pids[0] : null;
+                const pill = document.getElementById("minerStatusPill");
+                const btn = document.getElementById("toggleMinerBtn");
+                if (minerRunning) {
+                    if (pill) {
+                        pill.className = "tag tag-miner";
+                        pill.innerText = `● RUNNING (PID ${minerPid || ''})`;
+                    }
+                    if (btn) {
+                        btn.innerText = "🛑 Stop Miner";
+                        btn.style.background = "rgba(255, 68, 68, 0.2)";
+                        btn.style.borderColor = "#ff4444";
+                        btn.style.color = "#ff6666";
+                    }
+                } else {
+                    if (pill) {
+                        pill.className = "tag tag-dev";
+                        pill.innerText = "○ STOPPED";
+                    }
+                    if (btn) {
+                        btn.innerText = "🚀 Start Miner (2 Cores)";
+                        btn.style.background = "rgba(0, 230, 118, 0.2)";
+                        btn.style.borderColor = "#00e676";
+                        btn.style.color = "#00e676";
+                    }
+                }
+            } catch (e) {}
+        }
+
+        setInterval(checkMinerStatus, 3000);
+        checkMinerStatus();
+
+        const toggleBtn = document.getElementById("toggleMinerBtn");
+        if (toggleBtn) {
+            toggleBtn.addEventListener("click", async () => {
+                toggleBtn.disabled = true;
+                toggleBtn.innerText = "Processing...";
+                const endpoint = minerRunning ? "/api/miner/stop" : "/api/miner/start";
+                try {
+                    await fetch(endpoint);
+                    setTimeout(async () => {
+                        await checkMinerStatus();
+                        toggleBtn.disabled = false;
+                    }, 1200);
+                } catch (e) {
+                    toggleBtn.disabled = false;
+                }
+            });
+        }
+
+        // ---------------------------------------------------------------------
+        // Interactive On-Chain Staking Operations
+        // ---------------------------------------------------------------------
+        const statusMsg = document.getElementById("stakingStatusMsg");
+        function showStakingMsg(msg, isError = false) {
+            if (!statusMsg) return;
+            statusMsg.style.display = "block";
+            statusMsg.style.color = isError ? "#ff6666" : "var(--accent-cyan)";
+            statusMsg.innerText = msg;
+            setTimeout(() => { statusMsg.style.display = "none"; }, 6000);
+        }
+
+        const stakeBtn = document.getElementById("stakeBtn");
+        if (stakeBtn) {
+            stakeBtn.addEventListener("click", async () => {
+                const inputVal = document.getElementById("stakeAmountInput").value.trim();
+                const amt = inputVal || "all";
+                showStakingMsg(`Staking ${amt} THIN on-chain...`);
+                try {
+                    const res = await fetch(`/api/stake?amount=${encodeURIComponent(amt)}`);
+                    const data = await res.json();
+                    if (data.success) {
+                        showStakingMsg(`✓ Successfully staked ${amt} THIN into Loyalty Pool!`);
+                        document.getElementById("stakeAmountInput").value = "";
+                        fetchState();
+                    } else {
+                        showStakingMsg(`! Staking failed: ${data.output || 'Check wallet balance'}`, true);
+                    }
+                } catch (err) {
+                    showStakingMsg(`! Network error: ${err.message}`, true);
+                }
+            });
+        }
+
+        const unstakeBtn = document.getElementById("unstakeBtn");
+        if (unstakeBtn) {
+            unstakeBtn.addEventListener("click", async () => {
+                const inputVal = document.getElementById("stakeAmountInput").value.trim();
+                const amt = inputVal || "all";
+                showStakingMsg(`Unstaking ${amt} THIN to liquid wallet...`);
+                try {
+                    const res = await fetch(`/api/unstake?amount=${encodeURIComponent(amt)}`);
+                    const data = await res.json();
+                    if (data.success) {
+                        showStakingMsg(`✓ Successfully unstaked ${amt} THIN to wallet!`);
+                        document.getElementById("stakeAmountInput").value = "";
+                        fetchState();
+                    } else {
+                        showStakingMsg(`! Unstake failed: ${data.output || 'Check staked balance'}`, true);
+                    }
+                } catch (err) {
+                    showStakingMsg(`! Network error: ${err.message}`, true);
+                }
+            });
+        }
+
+        const claimYieldBtn = document.getElementById("claimYieldBtn");
+        if (claimYieldBtn) {
+            claimYieldBtn.addEventListener("click", async () => {
+                showStakingMsg("Harvesting pending staking yield...");
+                try {
+                    const res = await fetch("/api/claim");
+                    const data = await res.json();
+                    if (data.success) {
+                        showStakingMsg("✓ Successfully harvested pending yield to wallet!");
+                        fetchState();
+                    } else {
+                        showStakingMsg(`! Harvest failed: ${data.output || 'No pending yield'}`, true);
+                    }
+                } catch (err) {
+                    showStakingMsg(`! Network error: ${err.message}`, true);
+                }
+            });
+        }
+
+        // Send THIN to Friend Action Handler
+        const sendThinBtn = document.getElementById("sendThinBtn");
+        if (sendThinBtn) {
+            sendThinBtn.addEventListener("click", async () => {
+                const rec = document.getElementById("sendRecipientInput").value.trim();
+                const amt = document.getElementById("sendAmountInput").value.trim();
+                const msgEl = document.getElementById("transferStatusMsg");
+                if (!rec || !rec.startsWith("0x") || rec.length !== 42) {
+                    alert("Please enter a valid 42-character recipient address (0x...)");
+                    return;
+                }
+                if (!amt || isNaN(parseFloat(amt)) || parseFloat(amt) <= 0) {
+                    alert("Please enter a valid positive THIN amount to send.");
+                    return;
+                }
+                msgEl.style.display = "block";
+                msgEl.style.color = "var(--accent-cyan)";
+                msgEl.innerText = `Submitting on-chain transfer of ${amt} THIN on Base Mainnet...`;
+                sendThinBtn.disabled = true;
+                try {
+                    const res = await fetch(`/api/transfer?recipient=${encodeURIComponent(rec)}&amount=${encodeURIComponent(amt)}`);
+                    const data = await res.json();
+                    if (data.success) {
+                        msgEl.style.color = "var(--accent-green)";
+                        msgEl.innerHTML = `✓ Transferred ${amt} THIN successfully! <a href="https://basescan.org/address/${rec}" target="_blank" style="color:#00f2fe; text-decoration:underline;">View Recipient on BaseScan ↗</a>`;
+                        document.getElementById("sendAmountInput").value = "";
+                        fetchState();
+                    } else {
+                        msgEl.style.color = "#ff6666";
+                        msgEl.innerText = `! Transfer failed: ${data.output || 'Check balance and gas'}`;
+                    }
+                } catch (e) {
+                    msgEl.style.color = "#ff6666";
+                    msgEl.innerText = `! Network error: ${e.message}`;
+                } finally {
+                    sendThinBtn.disabled = false;
+                }
+            });
+        }
+
+        // ---------------------------------------------------------------------
+        // MetaMask Dynamic Icon WatchAsset & Account Sync
+        // ---------------------------------------------------------------------
+        document.getElementById("addMetaMaskBtn").addEventListener("click", async () => {
+            if (!window.ethereum) {
+                alert("MetaMask is not installed.");
+                return;
+            }
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_watchAsset',
+                    params: {
+                        type: 'ERC20',
+                        options: {
+                            address: '0x129af9c585f9a8a0438c79644d03e049ed6291b2',
+                            symbol: 'THIN',
+                            decimals: 18,
+                            image: new URL('thin_logo.svg', window.location.href).href,
+                        },
+                    },
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        });
+
+        // Live Unlock Countdown Timers (Dev Staking Vault & LP Locker)
+        let lpUnlockTimestamp = 1808608491; // April 25, 2027 (180 days)
+        let devUnlockTimestamp = 1808608533; // April 25, 2027 (180 days)
+
+        function updateCountdowns() {
+            const now = Math.floor(Date.now() / 1000);
+
+            // LP Timer
+            const lpDiff = Math.max(0, lpUnlockTimestamp - now);
+            const lpDays = Math.floor(lpDiff / 86400);
+            const lpHours = Math.floor((lpDiff % 86400) / 3600);
+            const lpMins = Math.floor((lpDiff % 3600) / 60);
+            const lpSecs = lpDiff % 60;
+            const lpEl = document.getElementById("lpLockTimer");
+            if (lpEl) {
+                lpEl.innerText = `${String(lpDays).padStart(2, '0')}d : ${String(lpHours).padStart(2, '0')}h : ${String(lpMins).padStart(2, '0')}m : ${String(lpSecs).padStart(2, '0')}s`;
+            }
+
+            // Dev Stake Timer
+            const devDiff = Math.max(0, devUnlockTimestamp - now);
+            const devDays = Math.floor(devDiff / 86400);
+            const devHours = Math.floor((devDiff % 86400) / 3600);
+            const devMins = Math.floor((devDiff % 3600) / 60);
+            const devSecs = devDiff % 60;
+            const devEl = document.getElementById("devLockTimer");
+            if (devEl) {
+                devEl.innerText = `${String(devDays).padStart(2, '0')}d : ${String(devHours).padStart(2, '0')}h : ${String(devMins).padStart(2, '0')}m : ${String(devSecs).padStart(2, '0')}s`;
+            }
+        }
+
+        setInterval(updateCountdowns, 1000);
+        updateCountdowns();
+
+        // Connect Wallet Button
+        const connectBtn = document.getElementById("connectWalletBtn");
+        if (connectBtn) {
+            connectBtn.addEventListener("click", async () => {
+                if (window.ethereum) {
+                    try {
+                        const accs = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                        if (accs.length > 0) {
+                            currentUserWallet = accs[0].toLowerCase();
+                            connectBtn.innerText = `${accs[0].slice(0, 6)}...${accs[0].slice(-4)}`;
+                            fetchUserStats(currentUserWallet);
+                        }
+                    } catch (e) {}
+                } else {
+                    alert("Please install MetaMask or an EVM browser wallet.");
+                }
+            });
+        }
+
+        // Sync with MetaMask Account for Live User Highlight
+        if (window.ethereum) {
+            window.ethereum.request({ method: 'eth_accounts' }).then(accounts => {
+                if (accounts.length > 0) {
+                    currentUserWallet = accounts[0].toLowerCase();
+                    if (connectBtn) connectBtn.innerText = `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
+                    fetchUserStats(currentUserWallet);
+                }
+            }).catch(() => {});
+
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length > 0) {
+                    currentUserWallet = accounts[0].toLowerCase();
+                    if (connectBtn) connectBtn.innerText = `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
+                    fetchUserStats(currentUserWallet);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

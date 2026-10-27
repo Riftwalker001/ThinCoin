@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#0e2338" />
+      <stop offset="60%" stop-color="#070c14" />
+      <stop offset="100%" stop-color="#03060a" />
+    </radialGradient>
+    
+    <!-- Neon Gradients -->
+    <linearGradient id="cyanNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="100%" stop-color="#4facfe" />
+    </linearGradient>
+
+    <linearGradient id="emeraldNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e676" />
+      <stop offset="100%" stop-color="#00b0ff" />
+    </linearGradient>
+
+    <linearGradient id="goldAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe259" />
+      <stop offset="100%" stop-color="#ffa751" />
+    </linearGradient>
+
+    <linearGradient id="thinPrism" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="45%" stop-color="#00e676" />
+      <stop offset="100%" stop-color="#0052ff" />
+    </linearGradient>
+
+    <!-- Glow Filters -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Deep Obsidian Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGlow)" stroke="#1a2e48" stroke-width="4" />
+
+  <!-- Outer Cyber Orbit Ring with Tick Marks -->
+  <circle cx="256" cy="256" r="222" fill="none" stroke="url(#cyanNeon)" stroke-width="2" stroke-opacity="0.35" stroke-dasharray="14 8 28 8" />
+  <circle cx="256" cy="256" r="206" fill="none" stroke="#00e676" stroke-width="1.5" stroke-opacity="0.25" stroke-dasharray="4 6" />
+
+  <!-- Hexagonal Tech Nodes around Rim -->
+  <g stroke="url(#cyanNeon)" stroke-width="2" fill="#070c14" opacity="0.8">
+    <circle cx="256" cy="34" r="6" />
+    <circle cx="256" cy="478" r="6" />
+    <circle cx="34" cy="256" r="6" />
+    <circle cx="478" cy="256" r="6" />
+  </g>
+
+  <!-- Sequential 64-Keccak Conduits (Laser Hashing Circuit Lines) -->
+  <g stroke="#00f2fe" stroke-width="1.5" opacity="0.3">
+    <path d="M 120 180 L 256 100 L 392 180" fill="none" />
+    <path d="M 120 332 L 256 412 L 392 332" fill="none" />
+    <path d="M 120 180 L 120 332" fill="none" />
+    <path d="M 392 180 L 392 332" fill="none" />
+  </g>
+
+  <!-- Razor-Thin Prismatic "T" Emblem with Holographic Slices -->
+  <!-- Upper Horizontal Crossbar (Prismatic Top) -->
+  <g filter="url(#glow)">
+    <!-- Top Face of Crossbar -->
+    <polygon points="130,150 256,110 382,150 256,170" fill="url(#cyanNeon)" opacity="0.95" />
+    
+    <!-- Left Slice of Crossbar -->
+    <polygon points="130,150 256,170 256,195 130,175" fill="#0080ff" opacity="0.85" />
+    
+    <!-- Right Slice of Crossbar -->
+    <polygon points="382,150 256,170 256,195 382,175" fill="url(#emeraldNeon)" opacity="0.9" />
+
+    <!-- Central Vertical Pillar (The Razor Stem) -->
+    <!-- Front Left Face -->
+    <polygon points="228,190 256,180 256,380 228,360" fill="url(#thinPrism)" opacity="0.9" />
+    
+    <!-- Front Right Face -->
+    <polygon points="256,180 284,190 284,360 256,380" fill="url(#emeraldNeon)" opacity="0.95" />
+
+    <!-- Bottom Prismatic Bevel -->
+    <polygon points="228,360 256,380 284,360 256,400" fill="url(#cyanNeon)" opacity="0.85" />
+  </g>
+
+  <!-- Golden 1-in-64 Jackpot Nexus Spark -->
+  <g filter="url(#glow)">
+    <circle cx="256" cy="180" r="7" fill="url(#goldAccent)" />
+    <!-- Radiant Diamond Crosshair -->
+    <path d="M 256 166 L 259 180 L 270 180 L 260 183 L 256 194 L 252 183 L 242 180 L 253 180 Z" fill="#ffe259" />
+  </g>
+
+  <!-- Holographic Core Lattice Grid Lines -->
+  <g stroke="#ffffff" stroke-width="1" opacity="0.4">
+    <line x1="256" y1="180" x2="256" y2="380" />
+    <line x1="170" y1="163" x2="342" y2="163" />
+  </g>
+
+  <!-- Clean Precision Typography "THIN" (Subtle Bottom Brand) -->
+  <text x="256" y="446" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="900" letter-spacing="9" fill="#e2e8f0" text-anchor="middle" opacity="0.9">THIN</text>
+  <text x="256" y="468" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" letter-spacing="3" fill="#00f2fe" text-anchor="middle" opacity="0.75">BASE L2 POW</text>
+</svg>

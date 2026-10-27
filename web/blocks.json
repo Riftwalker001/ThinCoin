@@ -1,0 +1,209 @@
+[
+  {
+    "epoch": 0,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "100,000 THIN",
+    "golden": false,
+    "nonce": 0,
+    "time": "Genesis",
+    "hash": "0x129af9c585f9a8a0438c79644d03e049ed6291b2"
+  },
+  {
+    "epoch": 1,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 84192,
+    "time": "15m ago",
+    "hash": "0x5a29f8c12b4e8701"
+  },
+  {
+    "epoch": 2,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 142055,
+    "time": "11m ago",
+    "hash": "0x89d4c207a1b32940"
+  },
+  {
+    "epoch": 3,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 63910,
+    "time": "8m ago",
+    "hash": "0xdc240d48c6bf9584"
+  },
+  {
+    "epoch": 4,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 98214,
+    "time": "5m ago",
+    "hash": "0x34f9a0c78a9d1203"
+  },
+  {
+    "epoch": 5,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 115042,
+    "time": "3m ago",
+    "hash": "0x77b819f02c61aa4b"
+  },
+  {
+    "epoch": 6,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 52891,
+    "time": "1m ago",
+    "hash": "0xac42f9b841e2609d"
+  },
+  {
+    "epoch": 7,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 72,
+    "time": "Just now",
+    "hash": "0x851230231b576e07"
+  },
+  {
+    "epoch": 8,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 17,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 9,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 1,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 12,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 529,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 14,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 135,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 15,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 22,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 16,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 226,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 17,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 121,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 19,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 52,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 21,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 41,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 23,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 480,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 25,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 85,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 27,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 209,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 29,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 92,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 31,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 1684,
+    "time": "Just now",
+    "hash": "blockHash"
+  },
+  {
+    "epoch": 36,
+    "miner": "0x617418435ba8782FEaa3756d0c853eCd1a7713F1",
+    "reward": "47.05 THIN",
+    "golden": false,
+    "nonce": 2365,
+    "time": "Just now",
+    "hash": "blockHash"
+  }
+]
